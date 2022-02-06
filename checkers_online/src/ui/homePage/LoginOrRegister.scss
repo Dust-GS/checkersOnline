@@ -1,0 +1,36 @@
+.login-or-register-box{
+    //border: 1px solid black;
+    margin: 0;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .login-or-register{
+        // border: 1px solid black;
+        width: 600px;
+        height: 150px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        button{
+            font-family: cursive;
+            font-size: 25px;
+            font-weight: 600;
+            width: 240px;
+            height: 70px;
+            //#88AED0
+            background-color: #709ec6;
+            border-radius: 15px;
+            //#78A2CC
+            border: 5px solid #6192c3;
+        }
+
+        button:hover{
+            background-color: #4279a9;
+            border: 5px solid #3d6fa1;
+        }
+    }
+}
