@@ -59,6 +59,29 @@
     }
 }
 
+@media (max-width: 550px) {
+    .register-box{
+        Form{
+            width: 85%;
+        }
+    }
+}
+
+@media (max-width: 500px) {
+    .register-box{
+        Form{
+            width: 80%;
+
+            .register-form{
+                width: 80%;
+            }
+            button{
+                width: 55%;
+            }
+        }
+    }
+}
+
 .error {
     color: red;
     font-size: 15px;
