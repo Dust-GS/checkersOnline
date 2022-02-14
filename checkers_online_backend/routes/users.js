@@ -1,11 +1,13 @@
+require('dotenv').config();
 const express = require('express');
 const router = express.Router();
 const argon2 = require("argon2");
+const jwt = require('jsonwebtoken')
 const User = require('../models/User');
 
 router.get('/getAllUsers', async (req, res) => {
     try{
-      const users = await User.find()
+      const users = await User.find().select('nickname')
   
       res.send({ message: "get all users success", allUsers: users});
   
@@ -24,11 +26,22 @@ router.post('/createUser', async (req, res) => {
 
       const newUser = await new User({
         nickname: nickname,
-        password: hash
+        password: hash,
+        numberOfRooms: 0
       })
 
+      const jwtInfo = { nickname: nickname, id: newUser.id }
+      const accessToken = jwt.sign(jwtInfo, process.env.ACCESS_TOKEN_SECRET)
+
+      const dataToSend = {
+        id: newUser.id,
+        nickname: nickname,
+        numberOfRooms: 0,
+        accessToken: accessToken
+      }
+
       await newUser.save()
-      res.send({ message: "user created", newUser: newUser });
+      res.send({ message: "user created", newUser: dataToSend });
     } catch (err) {
       if ( err && err.code !== 11000 ) {
         res.status(400).json({ message: err.message })
@@ -39,11 +52,21 @@ router.post('/createUser', async (req, res) => {
 });
 
 router.post('/login', getUser, async (req, res) => {
-  const password = req.body.password
+  const password = req.body.password //password podany przez uzytkownika
 
   try {
     if(await argon2.verify(res.user.password, password)){
-      res.send({ message: "log in successful", userData: res.user });
+      const jwtInfo = { nickname: res.user.nickname, id: res.user.id }
+      const accessToken = jwt.sign(jwtInfo, process.env.ACCESS_TOKEN_SECRET)
+
+      const dataToSend = {
+        id: res.user.id,
+        nickname: res.user.nickname,
+        numberOfRooms: res.user.numberOfRooms,
+        accessToken: accessToken
+      }
+
+      res.send({ message: "log in successful", userData: dataToSend });
     } else {
       res.status(404).json({ message: "password incorrect"})
     }
@@ -81,6 +104,19 @@ async function getUser(req, res, next){
   
     res.user = user
     next()
-  }
+}
+
+function authenticateToken(req, res, next){
+  const authHeader = req.headers['authorization']
+  const token = authHeader && authHeader.split(' ')[1]
+  //Bearer TOKEN 
+  if (token == null) return res.sendStatus(401)
+
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, jwtInfo) => {
+    if (err) return res.sendStatus(403)
+    req.user = jwtInfo
+    next()
+  })
+}
 
 module.exports = router;

@@ -4,6 +4,7 @@ import LoginOrRegister from './ui/homePage/LoginOrRegister';
 import Login from './ui/homePage/Login';
 import Register from './ui/homePage/Register';
 import Menu from './ui/menu/Menu';
+import CreateRoom from './ui/menu/CreateRoom';
 
 const App = () => {
   return (
@@ -14,6 +15,7 @@ const App = () => {
           <Route path="/login" element={<Login />}/>
           <Route path="/register" element={<Register />}/>
           <Route path="/menu" element={<Menu />}/>
+          <Route path="/createRoom" element={<CreateRoom />}/>
         </Routes>
       </div>
     </Router>

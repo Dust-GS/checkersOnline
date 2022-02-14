@@ -3,24 +3,36 @@ import types from "./types";
 const initialState = {
     users: [],
     yourData: {
+        id: "",
         nickname: "",
-        password: ""
+        numberOfRooms: null,
+        accessToken: ""
     },
     areAllUsersInStore: false,
     isNicknameTaken: false,
     isNicknameWrong: false,
-    isPaswordWrong: false
+    isPaswordWrong: false,
+    doYouHaveTooManyRooms: false
 }
 
 export const usersReducer = (state = initialState, action) => {
     switch(action.type) {
+        case types.USERS_CHANGE_YOUR_ROOMS_NUMBER:
+            return {...state, yourData: {
+                ...state.yourData,
+                numberOfRooms: action.payload
+            }}
+        case types.USERS_CHANGE_TOO_MANY_ROOMS_VALUE:
+            return {...state, doYouHaveTooManyRooms: action.payload}
         case types.USERS_CHANGE_NICKNAME_TAKEN_VALUE:
             return {...state, isNicknameTaken: action.payload}
         case types.USERS_SET_YOUR_DATA:
             return {...state,
                 yourData: {
+                    id: action.payload.id,
                     nickname: action.payload.nickname,
-                    password: action.payload.password
+                    numberOfRooms: action.payload.numberOfRooms,
+                    accessToken: action.payload.accessToken
                 }
             }
         case types.USERS_POST_USER_SUCCESS:
@@ -29,8 +41,10 @@ export const usersReducer = (state = initialState, action) => {
             return {...state,
                 users: [...state.users.filter(el => el.nickname !== action.payload.newUser.nickname), action.payload.newUser],
                 yourData: {
+                    id: action.payload.newUser.id,
                     nickname: action.payload.newUser.nickname,
-                    password: action.payload.newUser.password
+                    numberOfRooms: action.payload.newUser.numberOfRooms,
+                    accessToken: action.payload.newUser.accessToken
                 },
                 isNicknameTaken: false
             }
@@ -50,8 +64,10 @@ export const usersReducer = (state = initialState, action) => {
             return {...state,
                 users: [...state.users.filter(el => el.nickname !== action.payload.userData.nickname), action.payload.userData],
                 yourData: {
+                    id: action.payload.userData.id,
                     nickname: action.payload.userData.nickname,
-                    password: action.payload.userData.password
+                    numberOfRooms: action.payload.userData.numberOfRooms,
+                    accessToken: action.payload.userData.accessToken
                 },
                 isNicknameWrong: false,
                 isPaswordWrong: false

@@ -10,6 +10,10 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
+    numberOfRooms: {
+        type: Number,
+        required: true
+    }
 });
 
 module.exports = model('User', userSchema);

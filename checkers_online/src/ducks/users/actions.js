@@ -10,3 +10,13 @@ export const changeIsNicknameTakenAction = (newValue) => ({
     payload: newValue
     
 })
+
+export const changeDoYouHaveTooManyRoomsAction = (newValue) => ({
+    type: types.USERS_CHANGE_TOO_MANY_ROOMS_VALUE,
+    payload: newValue
+})
+
+export const changeYourRoomsNumberAction = (newValue) => ({
+    type: types.USERS_CHANGE_YOUR_ROOMS_NUMBER,
+    payload: newValue
+})

@@ -10,13 +10,7 @@ export const getAllUsersOperation = () => {
         },
         types: [
             'types.USERS_GET_ALL_USERS_START',
-            {
-                type: types.USERS_GET_ALL_USERS_SUCCESS,
-                payload: async (action, state, res) => {
-                    const json = await res.json();
-                    return json;
-                }
-            },
+            types.USERS_GET_ALL_USERS_SUCCESS,
             {
                 type: types.USERS_GET_ALL_USERS_FAILURE,
                 payload: async (action, state, res) => {
@@ -38,13 +32,7 @@ export const postUserOperation = (newUser) => {
         body: JSON.stringify(newUser),
         types: [
             'types.USERS_POST_USER_START',
-            {
-                type: types.USERS_POST_USER_SUCCESS,
-                payload: async (action, state, res) => {
-                    const json = await res.json();
-                    return json;
-                }
-            },
+            types.USERS_POST_USER_SUCCESS,
             {
                 type: types.USERS_POST_USER_FAILURE,
                 payload: async (action, state, res) => {
@@ -66,13 +54,8 @@ export const loginOperation = (userData) => {
         body: JSON.stringify(userData),
         types: [
             'types.USERS_LOGIN_START',
-            {
-                type: types.USERS_LOGIN_SUCCESS,
-                payload: async (action, state, res) => {
-                    const json = await res.json();
-                    return json;
-                }
-            },
+            types.USERS_LOGIN_SUCCESS,
+                
             {
                 type: types.USERS_LOGIN_FAILURE,
                 payload: async (action, state, res) => {
@@ -83,3 +66,4 @@ export const loginOperation = (userData) => {
         ],
     })
 }
+

@@ -1,0 +1,1 @@
+export const getIsRoomNameTaken = state => state.rooms.isRoomNameTaken

@@ -13,11 +13,17 @@ const Menu = ({
 
     const handleLogoutButton = () => {
         addYourDataAction({
+            id: "",
             nickname: "",
-            password: ""
+            numberOfRooms: null,
+            accessToken: ""
         })
         localStorage.clear()
         navigate("/")
+    }
+
+    const handleCreateRoomButton = () => {
+        navigate("/createRoom")
     }
 
     //w tym komponencie w storze potrzebuje tylko yourData
@@ -42,8 +48,8 @@ const Menu = ({
         </div>
         <div className='menu'>
             <button type='button' onClick={handleLogoutButton}>Log out</button>
-            <button type='button' onClick={handleLogoutButton}>Find game</button>
-            <button type='button' onClick={handleLogoutButton}>Create game</button>
+            <button type='button' >Find room</button>
+            <button type='button' onClick={handleCreateRoomButton}>Create room</button>
         </div>
     </div>
     )

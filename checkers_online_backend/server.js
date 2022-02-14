@@ -2,12 +2,14 @@ const express = require('express');
 const cors = require('cors')
 const app = express();
 const users = require('./routes/users');
+const rooms = require('./routes/rooms');
 
 app.use(express.json());
 app.use(cors({
     origin: 'http://localhost:3000'
-}))
+}));
 app.use('/users', users);
+app.use('/rooms', rooms);
 
 require('dotenv').config();
 
