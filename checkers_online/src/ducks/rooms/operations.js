@@ -7,7 +7,7 @@ export const createRoomOperation = (roomData) => {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer roomDaaccessToken`
+            'Authorization': `Bearer ${roomData.accessToken}`
         },
         body: JSON.stringify(roomData.newRoom),
         types: [

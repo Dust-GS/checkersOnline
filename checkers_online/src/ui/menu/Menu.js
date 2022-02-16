@@ -38,7 +38,6 @@ const Menu = ({
                 navigate("/")
             }
         }
-        
     }, [addYourDataAction, yourData, navigate]);
 
     return (
@@ -56,7 +55,6 @@ const Menu = ({
 }
 
 const mapStateToProps = (state) => {
-    
     return {
         yourData: getYourData(state)
     };

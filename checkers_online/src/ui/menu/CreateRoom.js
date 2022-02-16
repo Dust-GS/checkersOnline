@@ -9,6 +9,7 @@ import { getDoYouHaveTooManyRooms, getYourData } from '../../ducks/users/selecto
 import { createRoomOperation } from '../../ducks/rooms/operations';
 import { getIsRoomNameTaken } from '../../ducks/rooms/selectors';
 import { addYourDataAction, changeDoYouHaveTooManyRoomsAction, changeYourRoomsNumberAction } from '../../ducks/users/actions';
+import { changeRoomYouAreInDataAction } from '../../ducks/rooms/actions';
 
 const CreateRoom = ({
     yourData,
@@ -53,8 +54,32 @@ const CreateRoom = ({
             }
 
             await createRoomOperation({newRoom: newRoom, accessToken: yourData.accessToken}).then((result) => {
-                if(result.payload.message === "room created"){
-                    changeYourRoomsNumberAction(1)
+                switch(result.payload.message) {
+                    case "room created":
+                        changeYourRoomsNumberAction(1)
+                        const newLocalStorag = yourData
+                        newLocalStorag.numberOfRooms = 1
+                        //wsadzenie roomData do store
+                        changeRoomYouAreInDataAction(newRoom)
+                        //w local storage tez trzeba zwiekszyc na 1
+                        localStorage.setItem('user', JSON.stringify(newLocalStorag))
+                        navigate(`/oneRoom/${result.payload.newRoom._id}`)
+                        break;
+                    case "you already have a room":
+                        changeDoYouHaveTooManyRoomsAction(true)
+                        break;
+                    case "your session has expired":
+                        addYourDataAction({
+                            id: "",
+                            nickname: "",
+                            numberOfRooms: null,
+                            accessToken: ""
+                        })
+                        localStorage.clear()
+                        navigate("/")
+                        break;
+                    default:
+                        break;
                 }
             })
         }

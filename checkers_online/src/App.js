@@ -5,6 +5,7 @@ import Login from './ui/homePage/Login';
 import Register from './ui/homePage/Register';
 import Menu from './ui/menu/Menu';
 import CreateRoom from './ui/menu/CreateRoom';
+import OneRoom from './ui/game/OneRoom';
 
 const App = () => {
   return (
@@ -16,6 +17,7 @@ const App = () => {
           <Route path="/register" element={<Register />}/>
           <Route path="/menu" element={<Menu />}/>
           <Route path="/createRoom" element={<CreateRoom />}/>
+          <Route path="/oneRoom/:roomId" element={<OneRoom />}/>
         </Routes>
       </div>
     </Router>

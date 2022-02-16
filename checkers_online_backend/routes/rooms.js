@@ -3,6 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const router = express.Router();
 const Room = require('../models/Room');
+const User = require('../models/User');
 const jwt = require('jsonwebtoken')
 
 //get
@@ -19,24 +20,32 @@ router.get('/getAllRooms', async (req, res) => {
 
 //post
 router.post('/createRoom', authenticateToken, async (req, res) => {
-    //przy tworzeniu room moge wysylac tyko swoj token(nickname i id) i dane do room
-    //zwiekszyc liczbe roomsow dla typa
-    console.log(req.user)
-    // try {
-    //   const newRoom = await new Room(newRoomData)
+    try {
+      //sprawdzamy czy user moze stworzyc pokoj
+      const user = await User.findById(req.user.id)
+      if(user.numberOfRooms > 0) return res.status(400).json({ message: "you already have a room" })
 
-    //   const dataToSend = newRoom
-    res.status(400).json({ message: 'err.message' })
+      const newRoomData = req.body
+      const newRoom = await new Room(newRoomData)
+      //jak będzie haslo to tutaj dataToSend bedzie bez hasla
+      const dataToSend = newRoom
 
-    //   await newRoom.save()
-    //   res.send({ message: "room created", newRoom: dataToSend });
-    // } catch (err) {
-    //   if ( err && err.code !== 11000 ) {
-    //     res.status(400).json({ message: err.message })
-    //   } else if ( err && err.code === 11000 ) {
-    //     res.status(400).json({ message: "roomName is taken" })
-    //   }
-    // }
+      await newRoom.save()
+      res.send({ message: "room created", newRoom: dataToSend });
+
+      // zwiekszyc liczbe roomsow dla typa na jeden
+      // ale dopiero jak stworzy sie room
+      const filter = { nickname: req.user.nickname }
+      const update = { numberOfRooms: 1 }
+      await User.findOneAndUpdate(filter, update)
+
+    } catch (err) {
+      if ( err && err.code !== 11000 ) {
+        res.status(400).json({ message: err.message })
+      } else if ( err && err.code === 11000 ) {
+        res.status(400).json({ message: "roomName is taken" })
+      }
+    }
 });
 
 //delete
@@ -44,7 +53,7 @@ router.delete('/deleteRoom/:id', async (req, res) => {
     try {
       const user = await Room.findById(req.params.id)
 
-      await user.remove()
+      await Room.deleteMany()
   
       res.send({
         deletedUserId: res.user.id
@@ -60,13 +69,13 @@ function authenticateToken(req, res, next){
     const token = authHeader && authHeader.split(' ')[1]
     //dodac obsluge bledu niewlasciwego tokenu
     //twoja sesja wygasla czy cos
-    if (token == null) return res.sendStatus(401)
+    if (token == null) return res.send(401).json({ message: "your session has expired" })
     //brak tokenu hmm czyli hyba tez ze sesja wygasla czycos i trzeba wylogowac tamtą osobe  czy jaki refresh tokenu
   
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, jwtInfo) => {
-        console.log("ver")
-        if (err) return res.sendStatus(403)//obsluzyc zeby pokazalo ze sesja wygasla 
+        if (err) return res.send(403).json({ message: "your session has expired" })//obsluzyc zeby pokazalo ze sesja wygasla 
         req.user = jwtInfo
+        if (req.body.ownerId !== req.user.id) return res.send(403).json({ message: "you cant create room for another account" })
         next()
     })
   }

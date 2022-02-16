@@ -79,7 +79,7 @@ router.delete('/deleteUser/:id', async (req, res) => {
     try {
       const user = await User.findById(req.params.id)
 
-      await user.remove()
+      await User.deleteMany()
   
       res.send({
         deletedUserId: res.user.id
