@@ -8,7 +8,7 @@ import FormikControl from '../formControls/FormikControl'
 import { getDoYouHaveTooManyRooms, getYourData } from '../../ducks/users/selectors';
 import { createRoomOperation } from '../../ducks/rooms/operations';
 import { getIsRoomNameTaken } from '../../ducks/rooms/selectors';
-import { addYourDataAction, changeDoYouHaveTooManyRoomsAction, changeYourRoomsNumberAction } from '../../ducks/users/actions';
+import { addYourDataAction, changeDoYouHaveTooManyRoomsAction, changeRoomIdYouCreatedAction, changeYourRoomsNumberAction } from '../../ducks/users/actions';
 import { changeRoomYouAreInDataAction } from '../../ducks/rooms/actions';
 
 const CreateRoom = ({
@@ -18,7 +18,8 @@ const CreateRoom = ({
     doYouHaveTooManyRooms,
     changeDoYouHaveTooManyRoomsAction,
     changeYourRoomsNumberAction,
-    addYourDataAction
+    addYourDataAction,
+    changeRoomIdYouCreatedAction
 }) => {
     const navigate = useNavigate()
     const initialValues = {
@@ -57,13 +58,16 @@ const CreateRoom = ({
                 switch(result.payload.message) {
                     case "room created":
                         changeYourRoomsNumberAction(1)
-                        const newLocalStorag = yourData
-                        newLocalStorag.numberOfRooms = 1
-                        //wsadzenie roomData do store
-                        changeRoomYouAreInDataAction(newRoom)
+                        const newLocalStorage = yourData
+                        newLocalStorage.numberOfRooms = 1
+                        newLocalStorage.roomIdYouCreated = result.payload.newRoom.id
+                        //wsadzenie roomData do stores
+                        changeRoomYouAreInDataAction(result.payload.newRoom)
+                        //wsadzenie twoje pokoju id do store
+                        changeRoomIdYouCreatedAction(result.payload.newRoom.id)
                         //w local storage tez trzeba zwiekszyc na 1
-                        localStorage.setItem('user', JSON.stringify(newLocalStorag))
-                        navigate(`/oneRoom/${result.payload.newRoom._id}`)
+                        localStorage.setItem('user', JSON.stringify(newLocalStorage))
+                        navigate(`/oneRoom/${result.payload.newRoom.id}`)
                         break;
                     case "you already have a room":
                         changeDoYouHaveTooManyRoomsAction(true)
@@ -141,7 +145,8 @@ const mapDispatchToProps = {
     createRoomOperation,
     changeDoYouHaveTooManyRoomsAction,
     changeYourRoomsNumberAction,
-    addYourDataAction
+    addYourDataAction,
+    changeRoomIdYouCreatedAction
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateRoom);

@@ -4,42 +4,31 @@ import Message from './Message'
 
 const Chat = ({
   socket,
-  roomId
+  roomId,
+  messages,
+  yourNickname
 }) => {
   //stestowac co jak bedzie duzo wiadomosci
-  const [inputValue, setInputValue] = useState("")
-  const handleChangeInputValue = (event) => {
-    setInputValue(event.target.value)
+  const [messageContent, setMessageContent] = useState("")
+  const handleChangeMessageContent = (event) => {
+    setMessageContent(event.target.value)
   }
-  const handleSendMessage = () => {
-    //wiadomosc wysylac do servera i on wysyla do osob z tego pokoju
-    //socket.to(`room-${roomId}`).emit("send-message", inputValue)
-  }
-  const messages = [
-    {
-      owner: "Jan",
-      message: "hello"
-    },
-    {
-      owner: "Andrzej",
-      message: "hello"
-    },
-    {
-      owner: "Jan",
-      message: "what are you doing"
-    },
-    {
-      owner: "Andrzej",
-      message: "hello"
-    }
 
-  ]
+  const handleSendMessage = () => {
+    const message = {
+      senderNickname: yourNickname,
+      messageContent: messageContent
+    }
+    //wiadomosc wysylac do servera i on wysyla do osob z tego pokoju
+    socket.emit("send-message", message, roomId)
+  }
+
   return (
     <div className='chat-box'>
         {/* zapisyujemy chat w bazie */}
         <div className='chat'>
           {messages.map((el, index) => 
-              <Message key={index} owner={el.owner} message={el.message}/>
+              <Message key={index} senderNickname={el.senderNickname} messageContent={el.messageContent}/>
           )}
         </div>
         <div className='send-message-box'>
@@ -47,8 +36,8 @@ const Chat = ({
               className='input'
               type='text'
               placeholder='message...'
-              value={inputValue}
-              onChange={handleChangeInputValue}
+              value={messageContent}
+              onChange={handleChangeMessageContent}
 
             />
             <input

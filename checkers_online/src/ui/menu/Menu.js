@@ -26,6 +26,10 @@ const Menu = ({
         navigate("/createRoom")
     }
 
+    const handleFindRoomButton = () => {
+        navigate("/findRoom")
+    }
+
     //w tym komponencie w storze potrzebuje tylko yourData
     //pobieram z store jak nie ma to z localstorage jak nie ma to przenosi mnie do homePage
     useEffect(() => {
@@ -47,7 +51,7 @@ const Menu = ({
         </div>
         <div className='menu'>
             <button type='button' onClick={handleLogoutButton}>Log out</button>
-            <button type='button' >Find room</button>
+            <button type='button' onClick={handleFindRoomButton} >Find room</button>
             <button type='button' onClick={handleCreateRoomButton}>Create room</button>
         </div>
     </div>

@@ -6,7 +6,8 @@ const initialState = {
         id: "",
         nickname: "",
         numberOfRooms: null,
-        accessToken: ""
+        accessToken: "",
+        roomIdYouCreated: ""
     },
     areAllUsersInStore: false,
     isNicknameTaken: false,
@@ -17,6 +18,11 @@ const initialState = {
 
 export const usersReducer = (state = initialState, action) => {
     switch(action.type) {
+        case types.USERS_CHANGE_ROOM_ID_YOUR_CREATED:
+            return {...state, yourData: {
+                ...state.yourData,
+                roomIdYouCreated: action.payload
+            }}
         case types.USERS_CHANGE_YOUR_ROOMS_NUMBER:
             return {...state, yourData: {
                 ...state.yourData,
@@ -32,7 +38,8 @@ export const usersReducer = (state = initialState, action) => {
                     id: action.payload.id,
                     nickname: action.payload.nickname,
                     numberOfRooms: action.payload.numberOfRooms,
-                    accessToken: action.payload.accessToken
+                    accessToken: action.payload.accessToken,
+                    roomIdYouCreated: action.payload.roomIdYouCreated
                 }
             }
         case types.USERS_POST_USER_SUCCESS:
@@ -44,7 +51,8 @@ export const usersReducer = (state = initialState, action) => {
                     id: action.payload.newUser.id,
                     nickname: action.payload.newUser.nickname,
                     numberOfRooms: action.payload.newUser.numberOfRooms,
-                    accessToken: action.payload.newUser.accessToken
+                    accessToken: action.payload.newUser.accessToken,
+                    roomIdYouCreated: action.payload.newUser.roomIdYouCreated
                 },
                 isNicknameTaken: false
             }
@@ -67,7 +75,8 @@ export const usersReducer = (state = initialState, action) => {
                     id: action.payload.userData.id,
                     nickname: action.payload.userData.nickname,
                     numberOfRooms: action.payload.userData.numberOfRooms,
-                    accessToken: action.payload.userData.accessToken
+                    accessToken: action.payload.userData.accessToken,
+                    roomIdYouCreated: action.payload.userData.roomIdYouCreated
                 },
                 isNicknameWrong: false,
                 isPaswordWrong: false

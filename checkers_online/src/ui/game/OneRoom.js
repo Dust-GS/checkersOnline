@@ -13,6 +13,7 @@ const OneRoom = ({
 }) => {
   const { roomId } = useParams()
   const [socket, setSocket] = useState();
+  const [messages, setMessages] = useState([]) 
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -34,6 +35,12 @@ const OneRoom = ({
         //lączenie sie z pokojem
          //wysylanie prosby o doloczenie pokokju by tylko server moze przydzieli cie do pokoju
          newSocket.emit('join-room', roomId)
+
+         newSocket.on("receive-message", message => receiveMessageListener(message))
+
+         const receiveMessageListener = (message) => {
+           setMessages(elements => [...elements, message])
+         }
       })
 
       //bez tego close() się łączy
@@ -47,7 +54,7 @@ const OneRoom = ({
     <div className='one-room-box'>
       OneRoom<br/>
       {roomId}
-      <Chat socket={socket} roomId={roomId}/>
+      <Chat socket={socket} roomId={roomId} messages={messages} yourNickname={yourData.nickname}/>
       
     </div>
   )

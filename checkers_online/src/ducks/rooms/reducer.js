@@ -5,6 +5,7 @@ const initialState = {
     isRoomNameTaken: false,
     //mozliwe ze to jest niepotrzebne to nizej
     roomYouAreInData: {
+        id: "",
         roomName: "",
         ownerId:  "",
         board: [],
@@ -18,6 +19,7 @@ export const roomsReducer = (state = initialState, action) => {
         case types.ROOMS_CHANGE_ROOM_YOU_ARE_IN_DATA:
             return {...state,
                 roomYouAreInData: {
+                    id: action.payload.id,
                     roomName: action.payload.roomName,
                     ownerId:  action.payload.ownerId,
                     board: action.payload.board,
@@ -27,7 +29,7 @@ export const roomsReducer = (state = initialState, action) => {
             }
         case types.ROOMS_CREATE_ROOM_SUCCESS:
             return {...state,
-                rooms: [...state.rooms.filter(el => el._id !== action.payload.newRoom._id), action.payload.newRoom],
+                rooms: [...state.rooms.filter(el => el._id !== action.payload.newRoom.id), action.payload.newRoom],
                 isRoomNameTaken: false
             }
         case types.ROOMS_CREATE_ROOM_FAILURE:

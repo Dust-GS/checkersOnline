@@ -28,7 +28,14 @@ router.post('/createRoom', authenticateToken, async (req, res) => {
       const newRoomData = req.body
       const newRoom = await new Room(newRoomData)
       //jak będzie haslo to tutaj dataToSend bedzie bez hasla
-      const dataToSend = newRoom
+      const dataToSend = {
+        id: newRoom.id,
+        roomName: newRoom.roomName,
+        ownerId:  newRoom.ownerId,
+        board: newRoom.board,
+        whoIsNow: newRoom.whoIsNow,
+        playersId: newRoom.playersId
+      }
 
       await newRoom.save()
       res.send({ message: "room created", newRoom: dataToSend });
@@ -36,7 +43,7 @@ router.post('/createRoom', authenticateToken, async (req, res) => {
       // zwiekszyc liczbe roomsow dla typa na jeden
       // ale dopiero jak stworzy sie room
       const filter = { nickname: req.user.nickname }
-      const update = { numberOfRooms: 1 }
+      const update = { numberOfRooms: 1, roomIdYouCreated: dataToSend.id }
       await User.findOneAndUpdate(filter, update)
 
     } catch (err) {

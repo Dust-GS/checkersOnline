@@ -54,13 +54,17 @@ mongoose
 
       socket.on("join-room", (roomId) => joinRoomListener(roomId, socket))
 
-      socket.on("send-message", message => {
-        console.log(message)
-      })
+      socket.on("send-message", (message, roomId) => sendMesssageListener(message, roomId, socket))
     });
 
     const joinRoomListener = (roomId, socket) => {
       socket.join(`room-${roomId}`)
+    }
+
+    const sendMesssageListener = (message, roomId, socket) => {
+      //socket.broadcast.to(`room-${roomId}`).emit(message)
+      //w ramach testow
+      socket.emit("receive-message", message)
     }
 
   })

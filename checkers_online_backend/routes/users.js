@@ -19,7 +19,7 @@ router.get('/getAllUsers', async (req, res) => {
 router.post('/createUser', async (req, res) => {
     let hash
     const nickname = req.body.nickname
-    const password = req.body.password 
+    const password = req.body.password
 
     try {
       hash = await argon2.hash(password, "herbrhtjhds")
@@ -27,7 +27,8 @@ router.post('/createUser', async (req, res) => {
       const newUser = await new User({
         nickname: nickname,
         password: hash,
-        numberOfRooms: 0
+        numberOfRooms: 0,
+        roomIdYouCreated: ""
       })
 
       const jwtInfo = { nickname: nickname, id: newUser.id }
@@ -37,7 +38,8 @@ router.post('/createUser', async (req, res) => {
         id: newUser.id,
         nickname: nickname,
         numberOfRooms: 0,
-        accessToken: accessToken
+        accessToken: accessToken,
+        roomIdYouCreated: ""
       }
 
       await newUser.save()
@@ -63,7 +65,8 @@ router.post('/login', getUser, async (req, res) => {
         id: res.user.id,
         nickname: res.user.nickname,
         numberOfRooms: res.user.numberOfRooms,
-        accessToken: accessToken
+        accessToken: accessToken,
+        roomIdYouCreated: res.user.roomIdYouCreated
       }
 
       res.send({ message: "log in successful", userData: dataToSend });

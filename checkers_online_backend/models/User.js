@@ -13,6 +13,9 @@ const userSchema = new Schema({
     numberOfRooms: {
         type: Number,
         required: true
+    },
+    roomIdYouCreated: {
+        type: String
     }
 });
 

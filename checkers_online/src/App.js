@@ -6,6 +6,7 @@ import Register from './ui/homePage/Register';
 import Menu from './ui/menu/Menu';
 import CreateRoom from './ui/menu/CreateRoom';
 import OneRoom from './ui/game/OneRoom';
+import FindRoom from './ui/menu/FindRoom';
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
           <Route path="/menu" element={<Menu />}/>
           <Route path="/createRoom" element={<CreateRoom />}/>
           <Route path="/oneRoom/:roomId" element={<OneRoom />}/>
+          <Route path="/findRoom" element={<FindRoom />}/>
         </Routes>
       </div>
     </Router>

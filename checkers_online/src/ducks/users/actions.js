@@ -20,3 +20,8 @@ export const changeYourRoomsNumberAction = (newValue) => ({
     type: types.USERS_CHANGE_YOUR_ROOMS_NUMBER,
     payload: newValue
 })
+
+export const changeRoomIdYouCreatedAction = (roomId) => ({
+    type: types.USERS_CHANGE_ROOM_ID_YOUR_CREATED,
+    payload: roomId
+})

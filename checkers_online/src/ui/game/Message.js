@@ -2,12 +2,12 @@ import React from 'react'
 import './Message.scss'
 
 const Message = ({
-    message,
-    owner
+    messageContent,
+    senderNickname
 }) => {
   return (
     <div className='message-box'> 
-        <p><span>{owner}:</span> {message}</p>
+        <p><span>{senderNickname}:</span> {messageContent}</p>
     </div>
   )
 }
