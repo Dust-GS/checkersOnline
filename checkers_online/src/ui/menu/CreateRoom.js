@@ -19,7 +19,8 @@ const CreateRoom = ({
     changeDoYouHaveTooManyRoomsAction,
     changeYourRoomsNumberAction,
     addYourDataAction,
-    changeRoomIdYouCreatedAction
+    changeRoomIdYouCreatedAction,
+    changeRoomYouAreInDataAction
 }) => {
     const navigate = useNavigate()
     const initialValues = {
@@ -60,14 +61,14 @@ const CreateRoom = ({
                         changeYourRoomsNumberAction(1)
                         const newLocalStorage = yourData
                         newLocalStorage.numberOfRooms = 1
-                        newLocalStorage.roomIdYouCreated = result.payload.newRoom.id
+                        newLocalStorage.roomIdYouCreated = result.payload.newRoom._id
                         //wsadzenie roomData do stores
                         changeRoomYouAreInDataAction(result.payload.newRoom)
                         //wsadzenie twoje pokoju id do store
-                        changeRoomIdYouCreatedAction(result.payload.newRoom.id)
+                        changeRoomIdYouCreatedAction(result.payload.newRoom._id)
                         //w local storage tez trzeba zwiekszyc na 1
                         localStorage.setItem('user', JSON.stringify(newLocalStorage))
-                        navigate(`/oneRoom/${result.payload.newRoom.id}`)
+                        navigate(`/oneRoom/${result.payload.newRoom._id}`)
                         break;
                     case "you already have a room":
                         changeDoYouHaveTooManyRoomsAction(true)
@@ -146,7 +147,8 @@ const mapDispatchToProps = {
     changeDoYouHaveTooManyRoomsAction,
     changeYourRoomsNumberAction,
     addYourDataAction,
-    changeRoomIdYouCreatedAction
+    changeRoomIdYouCreatedAction,
+    changeRoomYouAreInDataAction
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateRoom);

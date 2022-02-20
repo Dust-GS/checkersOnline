@@ -5,7 +5,7 @@ const router = express.Router();
 const Room = require('../models/Room');
 const User = require('../models/User');
 const jwt = require('jsonwebtoken')
-
+// id jest w parametrzes _id
 //get
 router.get('/getAllRooms', async (req, res) => {
     try{
@@ -28,14 +28,7 @@ router.post('/createRoom', authenticateToken, async (req, res) => {
       const newRoomData = req.body
       const newRoom = await new Room(newRoomData)
       //jak będzie haslo to tutaj dataToSend bedzie bez hasla
-      const dataToSend = {
-        id: newRoom.id,
-        roomName: newRoom.roomName,
-        ownerId:  newRoom.ownerId,
-        board: newRoom.board,
-        whoIsNow: newRoom.whoIsNow,
-        playersId: newRoom.playersId
-      }
+      const dataToSend = newRoom
 
       await newRoom.save()
       res.send({ message: "room created", newRoom: dataToSend });

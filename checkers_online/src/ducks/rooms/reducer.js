@@ -3,6 +3,7 @@ import types from "./types";
 const initialState = {
     rooms: [],
     isRoomNameTaken: false,
+    gotRoomsFromDataBase: false,
     //mozliwe ze to jest niepotrzebne to nizej
     roomYouAreInData: {
         id: "",
@@ -16,10 +17,18 @@ const initialState = {
 
 export const roomsReducer = (state = initialState, action) => {
     switch(action.type) {
+        case types.ROOMS_GET_ROOMS_FROM_DATA_BASE_SUCCESS:
+            return {...state,
+                rooms: [...action.payload.allRooms],
+                gotRoomsFromDataBase: true
+            }
+        case types.ROOMS_GET_ROOMS_FROM_DATA_BASE_FAILURE:
+            alert(action.payload.message)
+            return state
         case types.ROOMS_CHANGE_ROOM_YOU_ARE_IN_DATA:
             return {...state,
                 roomYouAreInData: {
-                    id: action.payload.id,
+                    id: action.payload._id,
                     roomName: action.payload.roomName,
                     ownerId:  action.payload.ownerId,
                     board: action.payload.board,
@@ -29,7 +38,8 @@ export const roomsReducer = (state = initialState, action) => {
             }
         case types.ROOMS_CREATE_ROOM_SUCCESS:
             return {...state,
-                rooms: [...state.rooms.filter(el => el._id !== action.payload.newRoom.id), action.payload.newRoom],
+                //nie potrzebuje moje pokoju we wszystkich pokojach bo po co?
+                //rooms: [...state.rooms.filter(el => el._id !== action.payload.newRoom.id), action.payload.newRoom],
                 isRoomNameTaken: false
             }
         case types.ROOMS_CREATE_ROOM_FAILURE:

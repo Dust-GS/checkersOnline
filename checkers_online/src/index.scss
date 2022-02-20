@@ -1,6 +1,10 @@
 body {
     margin: 0;
     padding: 0;
-    height: 100vh;
-    width: 100vw;
+    background-image:
+    linear-gradient(to bottom, rgba(164,195,210,0.85) 10%, rgba(150,185,208,1) 55%),
+    url('./ui/images/image3.jpg');
+    background-size: contain;
+    //powoduje ze obrazek z tylu sie nie rusza gdy przesuwamy strone
+    background-attachment: fixed;
 }

@@ -23,3 +23,24 @@ export const createRoomOperation = (roomData) => {
         ],
     })
 }
+
+export const getAllRoomsOperation = () => {
+    return createAction({
+        endpoint: 'http://localhost:5000/rooms/getAllRooms',
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        types: [
+            'types.ROOMS_GET_ROOMS_FROM_DATA_BASE_START',
+            types.ROOMS_GET_ROOMS_FROM_DATA_BASE_SUCCESS,
+            {
+                type: types.ROOMS_GET_ROOMS_FROM_DATA_BASE_FAILURE,
+                payload: async (action, state, res) => {
+                    const json = await res.json();
+                    return json;
+                }
+            }
+        ],
+    })
+}
