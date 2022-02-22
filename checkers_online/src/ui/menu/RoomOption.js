@@ -1,30 +1,36 @@
-import React from 'react'
+import React from "react";
 import { connect } from "react-redux";
-import { getUserNameById } from '../../ducks/users/selectors';
-import './RoomOption.scss'
+import { getUserNameById } from "../../ducks/users/selectors";
+import { useNavigate } from "react-router-dom";
+import "./RoomOption.scss";
 
-const RoomOption = ({
-    roomName,
-    //ownerNickname
-}) => {
+const RoomOption = ({ roomName, owner, roomId }) => {
+  const navigate = useNavigate();
+
+  const handleClickRoomOption = () => {
+    navigate(`/oneRoom/${roomId}`);
+  };
+
   return (
     <div>
-        {/* {ownerNickname &&
-            <div  className='room-option-box'>
-                {ownerNickname}
-            </div>
-        } */}
-        <div className='room-option-box'>
-
+      {owner && (
+        <div className="room-option-box" onClick={handleClickRoomOption}>
+          <p>
+            <span>Owner:</span> {owner.nickname}
+          </p>
+          <p>
+            <span>Room name:</span> {roomName}
+          </p>
         </div>
+      )}
     </div>
-  )
-}
+  );
+};
 
 const mapStateToProps = (state, params) => {
-    return {
-        //ownerNickname: getUserNameById(state, params.ownerId)
-    };
-  }
-  
+  return {
+    owner: getUserNameById(state, params.ownerId),
+  };
+};
+
 export default connect(mapStateToProps, null)(RoomOption);

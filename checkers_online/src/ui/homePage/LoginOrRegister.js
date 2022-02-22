@@ -1,24 +1,34 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import './LoginOrRegister.scss'
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import "./LoginOrRegister.scss";
 
 const LoginOrRegister = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleLoginButton = () => {
-      navigate("/login")
-  }
+    navigate("/login");
+  };
 
   const handleRegisterButton = () => {
-      navigate("/register")
-  }
+    navigate("/register");
+  };
 
-  return <div className='login-or-register-box'>
-      <div className='login-or-register'>
-        <button type='button' onClick={handleLoginButton}>Log in</button>
-        <button type='button' className='button-register' onClick={handleRegisterButton}>Register</button>
+  return (
+    <div className="login-or-register-box">
+      <div className="login-or-register">
+        <button type="button" onClick={handleLoginButton}>
+          Log in
+        </button>
+        <button
+          type="button"
+          className="button-register"
+          onClick={handleRegisterButton}
+        >
+          Register
+        </button>
       </div>
-  </div>;
-}
+    </div>
+  );
+};
 
 export default LoginOrRegister;

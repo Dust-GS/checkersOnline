@@ -1,5 +1,28 @@
-.room-option-box{
-    border: 1px solid black;
-    width: 100px;
-    height: 200px;
+.room-option-box {
+  border: 5px solid #78a2cc;
+  border-radius: 10px;
+  background-color: #bfd4db;
+  width: 300px;
+  height: 150px;
+  padding: 10px;
+  margin-bottom: 10px;
+  font-family: cursive;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  span {
+    font-size: 22px;
+    font-weight: 600;
+  }
+
+  p {
+    font-size: 22px;
+    margin: 5px 5px 5px 30px;
+  }
+}
+
+.room-option-box:hover {
+  background-color: #a5c2cc;
+  border: 5px solid #6092c3;
 }
