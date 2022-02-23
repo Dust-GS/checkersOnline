@@ -1,73 +1,94 @@
-import React,{ useEffect, useState } from 'react'
-import './OneRoom.scss'
+import React, { useEffect, useState } from "react";
+import "./OneRoom.scss";
 import { connect } from "react-redux";
-import { useParams, useNavigate } from 'react-router-dom';
-import io from 'socket.io-client';
-import { addYourDataAction } from '../../ducks/users/actions';
-import { getYourData } from '../../ducks/users/selectors';
-import Chat from './Chat';
+import { useParams, useNavigate } from "react-router-dom";
+import io from "socket.io-client";
+import { addYourDataAction } from "../../ducks/users/actions";
+import { getYourData } from "../../ducks/users/selectors";
+import { getRoomYouAreInData } from "../../ducks/rooms/selectors";
+import Chat from "./Chat";
+import { getOneRoomOperation } from "../../ducks/rooms/operations";
 
 const OneRoom = ({
   yourData,
-  addYourDataAction
+  addYourDataAction,
+  roomYouAreInData,
+  getOneRoomOperation,
 }) => {
-  const { roomId } = useParams()
+  //dodac guzik wracania do menu
+  //co jak wchodzi durga osoba
+  const { roomId } = useParams();
   const [socket, setSocket] = useState();
-  const [messages, setMessages] = useState([]) 
-  const navigate = useNavigate()
+  const [messages, setMessages] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    if(yourData.nickname === ""){
+    if (yourData.nickname === "") {
       const loggedInUser = localStorage.getItem("user");
       if (loggedInUser) {
-          const foundedUser = JSON.parse(loggedInUser);
-          addYourDataAction(foundedUser)
+        const foundedUser = JSON.parse(loggedInUser);
+        addYourDataAction(foundedUser);
       } else {
-          navigate("/")
+        navigate("/");
       }
-  }
+    }
   }, [addYourDataAction, navigate, yourData]);
 
   useEffect(() => {
-      const newSocket = io('http://localhost:5000')
-      setSocket(newSocket);
-      newSocket.on("connect", () => {
-        //lączenie sie z pokojem
-         //wysylanie prosby o doloczenie pokokju by tylko server moze przydzieli cie do pokoju
-         newSocket.emit('join-room', roomId)
+    if (roomYouAreInData._id === "") {
+      getOneRoomOperation(roomId);
+    }
+  }, [getOneRoomOperation, roomId, roomYouAreInData._id]);
 
-         newSocket.on("receive-message", message => receiveMessageListener(message))
+  useEffect(() => {
+    const newSocket = io("http://localhost:5000");
+    setSocket(newSocket);
+    newSocket.on("connect", () => {
+      //lączenie sie z pokojem
+      //wysylanie prosby o doloczenie pokokju by tylko server moze przydzieli cie do pokoju
+      newSocket.emit("join-room", roomId);
 
-         const receiveMessageListener = (message) => {
-           setMessages(elements => [...elements, message])
-         }
-      })
+      newSocket.on("receive-message", (message) =>
+        receiveMessageListener(message)
+      );
 
-      //bez tego close() się łączy
-      //retrun chyba wywoluje sie przy opuszczaniu tego komponentu albo przy odswierzaniu strony zeby nie tworzylo sie wiele soketow
-      return () => {
-        newSocket.disconnect()
-      }
-  },[roomId])
+      const receiveMessageListener = (message) => {
+        setMessages((elements) => [...elements, message]);
+      };
+    });
+
+    //bez tego close() się łączy
+    //retrun chyba wywoluje sie przy opuszczaniu tego komponentu albo przy odswierzaniu strony zeby nie tworzylo sie wiele soketow
+    return () => {
+      newSocket.disconnect();
+    };
+  }, [roomId]);
 
   return (
-    <div className='one-room-box'>
-      OneRoom<br/>
+    <div className="one-room-box">
+      OneRoom
+      <br />
       {roomId}
-      <Chat socket={socket} roomId={roomId} messages={messages} yourNickname={yourData.nickname}/>
-      
+      <Chat
+        socket={socket}
+        roomId={roomId}
+        messages={messages}
+        yourNickname={yourData.nickname}
+      />
     </div>
-  )
-}
+  );
+};
 
 const mapStateToProps = (state) => {
   return {
-      yourData: getYourData(state)
+    yourData: getYourData(state),
+    roomYouAreInData: getRoomYouAreInData(state),
   };
-}
+};
 
 const mapDispatchToProps = {
-  addYourDataAction
-}
+  addYourDataAction,
+  getOneRoomOperation,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(OneRoom);
