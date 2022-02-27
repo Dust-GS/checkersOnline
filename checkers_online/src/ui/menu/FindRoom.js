@@ -24,8 +24,8 @@ const FindRoom = ({
   yourData,
   addYourDataAction,
 }) => {
-  console.log(allRooms);
   //wyswietlaja si wszystkie pokoje poza jego pokojem
+  //wyswietla liczbe graczy i nie mozna wejsc do pokju gdy jest juz dwoch graczy
 
   const navigate = useNavigate();
 

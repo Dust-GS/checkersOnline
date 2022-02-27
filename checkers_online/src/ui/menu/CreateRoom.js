@@ -47,21 +47,39 @@ const CreateRoom = ({
       changeDoYouHaveTooManyRoomsAction(false);
       //zwiekszyc liczbe roomsow lokalnie
 
+      // const newRoom = {
+      //   roomName: values.roomName,
+      //   ownerId: yourData._id,
+      //   board: [
+      //     [" ", "r", " ", "r", " ", "r", " ", "r"],
+      //     ["r", " ", "r", " ", "r", " ", "r", " "],
+      //     [" ", "r", " ", "r", " ", "r", " ", "r"],
+      //     [" ", " ", " ", " ", " ", " ", " ", " "],
+      //     [" ", " ", " ", " ", " ", " ", " ", " "],
+      //     ["b", " ", "b", " ", "b", " ", "b", " "],
+      //     [" ", "b", " ", "b", " ", "b", " ", "b"],
+      //     ["b", " ", "b", " ", "b", " ", "b", " "],
+      //   ],
+      //   whoIsNow: "red",
+      //   playersId: [yourData._id],
+      //   winnerId: ""
+      // };
       const newRoom = {
         roomName: values.roomName,
         ownerId: yourData._id,
         board: [
-          [" ", "r", " ", "r", " ", "r", " ", "r"],
-          ["r", " ", "r", " ", "r", " ", "r", " "],
-          [" ", "r", " ", "r", " ", "r", " ", "r"],
+          [" ", " ", " ", "r", " ", "r", " ", "r"],
+          [" ", " ", "r", " ", "r", " ", "r", " "],
+          [" ", " ", " ", "r", " ", "r", " ", "r"],
+          [" ", " ", "b", " ", " ", " ", " ", " "],
+          [" ", " ", " ", "b", " ", " ", " ", " "],
           [" ", " ", " ", " ", " ", " ", " ", " "],
           [" ", " ", " ", " ", " ", " ", " ", " "],
-          ["b", " ", "b", " ", "b", " ", "b", " "],
-          [" ", "b", " ", "b", " ", "b", " ", "b"],
-          ["b", " ", "b", " ", "b", " ", "b", " "],
+          [" ", " ", " ", " ", " ", " ", " ", " "],
         ],
-        whoIsNow: "White",
+        whoIsNow: "red",
         playersId: [yourData._id],
+        winnerId: "",
       };
 
       await createRoomOperation({

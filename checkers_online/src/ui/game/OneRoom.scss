@@ -1,8 +1,26 @@
-.one-room-box{
-    height: 100vh;
-    width: 100vw;
+.one-room-box {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .who-is-now-box {
+    //border: 1px solid black;
+    font-family: cursive;
+    font-weight: 600;
+    font-size: 60px;
+
+    p {
+      margin: 0 0 20px 0;
+    }
+  }
+
+  .board-chat-box {
+    //border: 1px solid black;
     display: flex;
     justify-content: center;
     align-items: center;
-
+  }
 }

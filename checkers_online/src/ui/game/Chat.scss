@@ -1,46 +1,46 @@
-.chat-box{
-    height: 450px;
-    width: 320px;
-    background-color: #BFD4DB;
+.chat-box {
+  height: 450px;
+  width: 320px;
+  background-color: #bfd4db;
+  display: flex;
+  flex-direction: column;
+  border: 5px solid #6192c3;
+  border-radius: 20px;
+  padding: 15px;
+  font-family: cursive;
+
+  .chat {
+    padding: 0px 7px 0px 7px;
+    height: 90%;
+  }
+
+  .send-message-box {
     display: flex;
-    flex-direction: column;
-    border: 5px solid #78A2CC;
-    border-radius: 20px;
-    padding: 15px;
-    font-family: cursive;
+    align-items: flex-end;
+    justify-content: space-between;
+    height: 10%;
 
-    .chat{
-        padding: 0px 7px 0px 7px;
-        height: 90%;
+    input {
+      font-family: cursive;
+      border: none;
+      border-radius: 10px;
+      display: inline-block;
+      padding: 5px 10px;
+      font-size: 17px;
     }
 
-    .send-message-box{
-        display: flex;
-        align-items: flex-end;
-        justify-content: space-between;
-        height: 10%;
-
-        input{
-            font-family: cursive;
-            border: none;
-            border-radius: 10px;
-            display: inline-block;
-            padding: 5px 10px;
-            font-size: 17px;
-        }
-
-        .input{
-            width: 65%;
-            border-right: none;
-        }
-
-        .input:focus{
-            outline: none !important;
-            box-shadow: none;
-        }
-
-        .submit{
-            width: 25%;
-        }
+    .input {
+      width: 65%;
+      border-right: none;
     }
+
+    .input:focus {
+      outline: none !important;
+      box-shadow: none;
+    }
+
+    .submit {
+      width: 25%;
+    }
+  }
 }
