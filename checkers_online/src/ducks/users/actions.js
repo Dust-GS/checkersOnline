@@ -24,3 +24,8 @@ export const changeRoomIdYouCreatedAction = (roomId) => ({
   type: types.USERS_CHANGE_ROOM_ID_YOUR_CREATED,
   payload: roomId,
 });
+
+export const changeYouAreInGameAction = (newValue) => ({
+  type: types.USERS_CHANGE_YOUR_ARE_IN_GAME,
+  payload: newValue,
+});

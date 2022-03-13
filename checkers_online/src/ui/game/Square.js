@@ -168,11 +168,13 @@ function Square({
         });
       });
 
-      if (newNumberOfBlackPieces === 0 && newNumberOfRedPieces === 0) {
+      if (newNumberOfBlackPieces === 0 || newNumberOfRedPieces === 0) {
+        console.log(yourId, roomId);
         socket.emit("new-winner", roomId, yourId);
         someoneWonAction(yourId);
+        setMoveOptions([]);
+        setClickedSquare([]);
       }
-
       //co jak zbil
       //czerwone
       if (whoIsNow === "red" && pieceWasCaptured === true) {

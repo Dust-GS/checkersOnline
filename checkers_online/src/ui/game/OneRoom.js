@@ -32,7 +32,23 @@ const OneRoom = ({
   const [socket, setSocket] = useState();
   const [messages, setMessages] = useState([]);
   const navigate = useNavigate();
-  console.log(roomYouAreInData);
+
+  const getWhoIsNow = (roomYouAreInData, yourColor, yourData) => {
+    if (
+      roomYouAreInData._id !== "" &&
+      yourColor !== undefined &&
+      yourData._id !== ""
+    ) {
+      if (roomYouAreInData.winnerId !== "") {
+        if (roomYouAreInData.winnerId === yourData._id) return "You won :)";
+        else if (roomYouAreInData.winnerId !== yourData._id)
+          return "You lost :(";
+      }
+
+      if (roomYouAreInData.whoIsNow === yourColor) return "Your turn";
+      else return "Opponent's turn";
+    } else return "";
+  };
 
   useEffect(() => {
     if (yourData.nickname === "") {
@@ -141,7 +157,7 @@ const OneRoom = ({
   return (
     <div className="one-room-box">
       <div className="who-is-now-box">
-        {roomYouAreInData._id !== "" && <p>Your Turn</p>}
+        <p>{getWhoIsNow(roomYouAreInData, yourColor, yourData)}</p>
       </div>
       <div className="board-chat-box">
         <Board

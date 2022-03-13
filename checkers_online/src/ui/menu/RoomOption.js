@@ -4,7 +4,7 @@ import { getUserNameById } from "../../ducks/users/selectors";
 import { useNavigate } from "react-router-dom";
 import "./RoomOption.scss";
 
-const RoomOption = ({ roomName, owner, roomId }) => {
+const RoomOption = ({ roomName, owner, roomId, numberOfPlayers }) => {
   const navigate = useNavigate();
 
   const handleClickRoomOption = () => {
@@ -20,6 +20,9 @@ const RoomOption = ({ roomName, owner, roomId }) => {
           </p>
           <p>
             <span>Room name:</span> {roomName}
+          </p>
+          <p>
+            <span>Players:</span> {numberOfPlayers}/2
           </p>
         </div>
       )}

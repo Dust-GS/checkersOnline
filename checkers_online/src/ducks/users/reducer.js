@@ -8,6 +8,7 @@ const initialState = {
     numberOfRooms: null,
     accessToken: "",
     roomIdYouCreated: "",
+    youAreInGame: false,
   },
   areAllUsersInStore: false,
   isNicknameTaken: false,
@@ -18,6 +19,14 @@ const initialState = {
 
 export const usersReducer = (state = initialState, action) => {
   switch (action.type) {
+    case types.USERS_CHANGE_YOUR_ARE_IN_GAME:
+      return {
+        ...state,
+        yourData: {
+          ...state.yourData,
+          youAreInGame: action.payload,
+        },
+      };
     case types.USERS_CHANGE_ROOM_ID_YOUR_CREATED:
       return {
         ...state,
@@ -47,6 +56,7 @@ export const usersReducer = (state = initialState, action) => {
           numberOfRooms: action.payload.numberOfRooms,
           accessToken: action.payload.accessToken,
           roomIdYouCreated: action.payload.roomIdYouCreated,
+          youAreInGame: action.payload.youAreInGame,
         },
       };
     case types.USERS_POST_USER_SUCCESS:
@@ -67,6 +77,7 @@ export const usersReducer = (state = initialState, action) => {
           numberOfRooms: action.payload.newUser.numberOfRooms,
           accessToken: action.payload.newUser.accessToken,
           roomIdYouCreated: action.payload.newUser.roomIdYouCreated,
+          youAreInGame: action.payload.newUser.youAreInGame,
         },
         isNicknameTaken: false,
       };
@@ -97,6 +108,7 @@ export const usersReducer = (state = initialState, action) => {
           numberOfRooms: action.payload.userData.numberOfRooms,
           accessToken: action.payload.userData.accessToken,
           roomIdYouCreated: action.payload.userData.roomIdYouCreated,
+          youAreInGame: action.payload.userData.youAreInGame,
         },
         isNicknameWrong: false,
         isPaswordWrong: false,

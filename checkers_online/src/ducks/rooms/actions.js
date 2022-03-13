@@ -14,6 +14,6 @@ export const enemyMovedAction = (updatedBoard, whoIsNow) => ({
 });
 
 export const someoneWonAction = (winnerId) => ({
-  type: types.ROOMS_ENEMY_MOVED,
+  type: types.ROOMS_SOMEONE_WON,
   payload: winnerId,
 });

@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import FormikControl from "../formControls/FormikControl";
 import {
   getDoYouHaveTooManyRooms,
+  getYouAreInGame,
   getYourData,
 } from "../../ducks/users/selectors";
 import { createRoomOperation } from "../../ducks/rooms/operations";
@@ -15,6 +16,7 @@ import {
   addYourDataAction,
   changeDoYouHaveTooManyRoomsAction,
   changeRoomIdYouCreatedAction,
+  changeYouAreInGameAction,
   changeYourRoomsNumberAction,
 } from "../../ducks/users/actions";
 
@@ -27,6 +29,8 @@ const CreateRoom = ({
   changeYourRoomsNumberAction,
   addYourDataAction,
   changeRoomIdYouCreatedAction,
+  changeYouAreInGameAction,
+  youAreInGame,
 }) => {
   //gdy twoja nazwa jest zajeta wyswietal najpierw usun swoj poprzedni pokoj
   //i obok jest jeszcze guzik pozawalający usunąć poprzedni pokoj
@@ -101,6 +105,9 @@ const CreateRoom = ({
           case "you already have a room":
             changeDoYouHaveTooManyRoomsAction(true);
             break;
+          case "you are in game":
+            changeYouAreInGameAction(true);
+            break;
           case "your session has expired":
             addYourDataAction({
               _id: "",
@@ -154,6 +161,7 @@ const CreateRoom = ({
               {doYouHaveTooManyRooms && (
                 <p className="error">You already have room</p>
               )}
+              {youAreInGame && <p className="error">First, finish your game</p>}
             </div>
             <button type="submit" disabled={formik.isSubmitting}>
               Create room
@@ -170,6 +178,7 @@ const mapStateToProps = (state) => {
     yourData: getYourData(state),
     isRoomNameTaken: getIsRoomNameTaken(state),
     doYouHaveTooManyRooms: getDoYouHaveTooManyRooms(state),
+    youAreInGame: getYouAreInGame(state),
   };
 };
 
@@ -179,6 +188,7 @@ const mapDispatchToProps = {
   changeYourRoomsNumberAction,
   addYourDataAction,
   changeRoomIdYouCreatedAction,
+  changeYouAreInGameAction,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateRoom);

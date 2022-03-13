@@ -58,8 +58,11 @@ const FindRoom = ({
 
   return (
     <div className="all-rooms-box">
-      <div className="search-room-box"></div>
       <div className="all-rooms">
+        <div className="search-room-box">
+          <p>Rooms:</p>
+        </div>
+
         {allRooms
           .filter((room) => room.ownerId !== yourData._id)
           .map((room) => (
@@ -68,6 +71,7 @@ const FindRoom = ({
               roomName={room.roomName}
               ownerId={room.ownerId}
               roomId={room._id}
+              numberOfPlayers={room.playersId.length}
             />
           ))}
       </div>

@@ -4,7 +4,6 @@ const initialState = {
   rooms: [],
   isRoomNameTaken: false,
   gotRoomsFromDataBase: false,
-  //mozliwe ze to jest niepotrzebne to nizej
   roomYouAreInData: {
     _id: "",
     roomName: "",
@@ -91,6 +90,8 @@ export const roomsReducer = (state = initialState, action) => {
           newIsRoomNameTaken = true;
           break;
         case "you already have a room":
+          break;
+        case "you are in game":
           break;
         default:
           alert(action.payload.message);
