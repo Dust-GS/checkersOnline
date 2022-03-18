@@ -1,7 +1,5 @@
 .room-option-box {
-  border: 5px solid #78a2cc;
   border-radius: 10px;
-  background-color: #bfd4db;
   width: 300px;
   height: 150px;
   padding: 10px;
@@ -22,7 +20,17 @@
   }
 }
 
-.room-option-box:hover {
+.full {
+  background-color: #bfd4db;
+  border: 5px solid #78a2cc;
+}
+
+.full:hover {
+  background-color: #a5c2cc;
+  border: 5px solid #6092c3;
+}
+
+.not-full {
   background-color: #a5c2cc;
   border: 5px solid #6092c3;
 }

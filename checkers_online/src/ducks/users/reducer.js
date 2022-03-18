@@ -8,7 +8,7 @@ const initialState = {
     numberOfRooms: null,
     accessToken: "",
     roomIdYouCreated: "",
-    youAreInGame: false,
+    youAreInGame: "",
   },
   areAllUsersInStore: false,
   isNicknameTaken: false,

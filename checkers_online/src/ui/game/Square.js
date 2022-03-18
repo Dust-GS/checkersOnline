@@ -120,6 +120,8 @@ function Square({
       const updatedBoard = board;
 
       updatedBoard[clickedSquare[0]][clickedSquare[1]] = " "; //pole z ktorego sie ruszam
+
+      //czy pole na ktore sie ruszam jest na granicy bo wtedy powstaje damka pisana capslockiem
       updatedBoard[rowNumber][columnNumber] = clickedSquare[2]; //pole na ktore sie ruszam
 
       //czerwone

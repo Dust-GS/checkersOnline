@@ -20,8 +20,9 @@ const App = () => {
           <Route path="/menu" element={<Menu />} />
           {/* sprawdza czy jestes zalogowany przy odswierzeniu */}
           <Route path="/createRoom" element={<CreateRoom />} />
-
+          {/* sprawdza czy jestes zalogowany przy odswierzeniu */}
           <Route path="/findRoom" element={<FindRoom />} />
+          {/* sprawdza czy jestes zalogowany przy odswierzeniu */}
           <Route path="/oneRoom/:roomId" element={<OneRoom />} />
         </Routes>
       </div>

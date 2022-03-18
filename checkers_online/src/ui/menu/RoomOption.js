@@ -4,17 +4,39 @@ import { getUserNameById } from "../../ducks/users/selectors";
 import { useNavigate } from "react-router-dom";
 import "./RoomOption.scss";
 
-const RoomOption = ({ roomName, owner, roomId, numberOfPlayers }) => {
+const RoomOption = ({
+  roomName,
+  owner,
+  roomId,
+  numberOfPlayers,
+  changeYouAreInGameAction,
+}) => {
   const navigate = useNavigate();
 
   const handleClickRoomOption = () => {
-    navigate(`/oneRoom/${roomId}`);
+    if (numberOfPlayers < 2) {
+      const loggedInUser = localStorage.getItem("user");
+      if (loggedInUser) {
+        const foundedUser = JSON.parse(loggedInUser);
+        foundedUser.youAreInGame = roomId;
+        localStorage.setItem("user", JSON.stringify(foundedUser));
+        changeYouAreInGameAction(roomId);
+        navigate(`/oneRoom/${roomId}`);
+      } else {
+        navigate("/");
+      }
+    }
   };
 
   return (
     <div>
       {owner && (
-        <div className="room-option-box" onClick={handleClickRoomOption}>
+        <div
+          className={`room-option-box ${
+            numberOfPlayers === 2 ? "not-full" : "full"
+          }`}
+          onClick={handleClickRoomOption}
+        >
           <p>
             <span>Owner:</span> {owner.nickname}
           </p>

@@ -18,6 +18,8 @@ const Menu = ({ yourData, addYourDataAction }) => {
       nickname: "",
       numberOfRooms: null,
       accessToken: "",
+      roomIdYouCreated: "",
+      youAreInGame: "",
     });
     localStorage.clear();
     navigate("/");

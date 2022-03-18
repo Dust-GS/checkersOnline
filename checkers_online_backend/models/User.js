@@ -18,8 +18,7 @@ const userSchema = new Schema({
     type: String,
   },
   youAreInGame: {
-    type: Boolean,
-    required: true,
+    type: String,
   },
 });
 

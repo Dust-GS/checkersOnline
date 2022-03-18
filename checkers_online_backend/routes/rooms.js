@@ -34,8 +34,6 @@ router.post("/createRoom", authenticateToken, async (req, res) => {
     const user = await User.findById(req.user.id);
     if (user.numberOfRooms > 0)
       return res.status(400).json({ message: "you already have a room" });
-    else if (user.yourAreInGame === true)
-      return res.status(400).json({ message: "you are in game" });
 
     const newRoomData = req.body;
     const newRoom = await new Room(newRoomData);
@@ -51,7 +49,7 @@ router.post("/createRoom", authenticateToken, async (req, res) => {
     const update = {
       numberOfRooms: 1,
       roomIdYouCreated: dataToSend.id,
-      youAreInGame: true,
+      youAreInGame: dataToSend.id,
     };
     await User.findOneAndUpdate(filter, update);
   } catch (err) {

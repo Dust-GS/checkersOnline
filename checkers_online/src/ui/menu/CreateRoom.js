@@ -93,9 +93,11 @@ const CreateRoom = ({
         switch (result.payload.message) {
           case "room created":
             changeYourRoomsNumberAction(1);
+            changeYouAreInGameAction(result.payload.newRoom._id);
             const newLocalStorage = yourData;
             newLocalStorage.numberOfRooms = 1;
             newLocalStorage.roomIdYouCreated = result.payload.newRoom._id;
+            newLocalStorage.youAreInGame = result.payload.newRoom._id;
             //wsadzenie twoje pokoju id do store
             changeRoomIdYouCreatedAction(result.payload.newRoom._id);
             //w local storage tez trzeba zwiekszyc na 1
@@ -105,15 +107,14 @@ const CreateRoom = ({
           case "you already have a room":
             changeDoYouHaveTooManyRoomsAction(true);
             break;
-          case "you are in game":
-            changeYouAreInGameAction(true);
-            break;
           case "your session has expired":
             addYourDataAction({
               _id: "",
               nickname: "",
               numberOfRooms: null,
               accessToken: "",
+              roomIdYouCreated: "",
+              youAreInGame: "",
             });
             localStorage.clear();
             navigate("/");
@@ -161,7 +162,9 @@ const CreateRoom = ({
               {doYouHaveTooManyRooms && (
                 <p className="error">You already have room</p>
               )}
-              {youAreInGame && <p className="error">First, finish your game</p>}
+              {youAreInGame !== "" && (
+                <p className="error">First, finish your game</p>
+              )}
             </div>
             <button type="submit" disabled={formik.isSubmitting}>
               Create room

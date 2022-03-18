@@ -6,7 +6,10 @@ import {
   getAllRooms,
   getGotRoomsFromDataBase,
 } from "../../ducks/rooms/selectors";
-import { addYourDataAction } from "../../ducks/users/actions";
+import {
+  addYourDataAction,
+  changeYouAreInGameAction,
+} from "../../ducks/users/actions";
 import { getAllUsersOperation } from "../../ducks/users/operations";
 import {
   getAreAllUsersInStore,
@@ -23,6 +26,7 @@ const FindRoom = ({
   getAllUsersOperation,
   yourData,
   addYourDataAction,
+  changeYouAreInGameAction,
 }) => {
   //wyswietlaja si wszystkie pokoje poza jego pokojem
   //wyswietla liczbe graczy i nie mozna wejsc do pokju gdy jest juz dwoch graczy
@@ -53,6 +57,8 @@ const FindRoom = ({
       } else {
         navigate("/");
       }
+    } else if (yourData.youAreInGame !== "") {
+      navigate(`/oneRoom/${yourData.youAreInGame}`);
     }
   }, [addYourDataAction, yourData, navigate]);
 
@@ -72,6 +78,7 @@ const FindRoom = ({
               ownerId={room.ownerId}
               roomId={room._id}
               numberOfPlayers={room.playersId.length}
+              changeYouAreInGameAction={changeYouAreInGameAction}
             />
           ))}
       </div>
@@ -92,6 +99,7 @@ const mapDispatchToProps = {
   getAllRoomsOperation,
   getAllUsersOperation,
   addYourDataAction,
+  changeYouAreInGameAction,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(FindRoom);

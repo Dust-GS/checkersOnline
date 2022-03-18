@@ -28,7 +28,7 @@ router.post("/createUser", async (req, res) => {
       password: hash,
       numberOfRooms: 0,
       roomIdYouCreated: "",
-      youAreInGame: false,
+      youAreInGame: "",
     });
 
     const jwtInfo = { nickname: nickname, id: newUser.id };
@@ -40,7 +40,7 @@ router.post("/createUser", async (req, res) => {
       numberOfRooms: 0,
       accessToken: accessToken,
       roomIdYouCreated: "",
-      youAreInGame: false,
+      youAreInGame: "",
     };
 
     await newUser.save();
