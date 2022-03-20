@@ -39,37 +39,110 @@ function Square({
   const handleSquareClick = () => {
     //gdy rusza sie czerwony
     //console.log(`rowNumber: ${rowNumber}, columnNumber: ${columnNumber}`);
-    if (yourColor === "red" && squareData === "r" && whoIsNow === "red") {
+    if (
+      //czy kliknąłem swoj pionek w swojej rundzie
+      yourColor === "red" &&
+      squareData.toLowerCase() === "r" &&
+      whoIsNow === "red"
+    ) {
       const result = [];
-      setClickedSquare([rowNumber, columnNumber, "r"]);
+      setClickedSquare([rowNumber, columnNumber, squareData]);
 
       //ruch w prawą strone
-      if (rowNumber + 1 <= 7 && columnNumber + 1 <= 7) {
-        //czy nie wychodzi poza plansze
-        if (
-          board[rowNumber + 1][columnNumber + 1] === "b" &&
-          rowNumber + 2 <= 7 &&
-          columnNumber + 2 <= 7
-        ) {
-          if (board[rowNumber + 2][columnNumber + 2] === " ")
-            result.push([rowNumber + 2, columnNumber + 2]);
-        } else if (board[rowNumber + 1][columnNumber + 1] === " ") {
-          result.push([rowNumber + 1, columnNumber + 1]);
-        }
-      }
+      if (squareData === "R") {
+        //ruch damką
+        //mozliweosc prawy gorny skos
+        //zaczynamy od bloczka gora prawo od pionka
+        //czy gora prawo nie jest poza planszą
+        if (rowNumber - 1 >= 0 && columnNumber + 1 <= 7) {
+          //czy prawo gora jest puste
+          if (board[rowNumber - 1][columnNumber + 1].toLowerCase() === " ") {
+            let x = rowNumber - 1;
+            let y = columnNumber + 1;
 
-      //ruch w lewą strone
-      if (rowNumber + 1 <= 7 && columnNumber - 1 >= 0) {
-        //czy nie wychodzi poza plansze
-        if (
-          board[rowNumber + 1][columnNumber - 1] === "b" &&
-          rowNumber + 2 <= 7 &&
-          columnNumber - 2 >= 0
-        ) {
-          if (board[rowNumber + 2][columnNumber - 2] === " ")
-            result.push([rowNumber + 2, columnNumber - 2]);
-        } else if (board[rowNumber + 1][columnNumber - 1] === " ") {
-          result.push([rowNumber + 1, columnNumber - 1]);
+            while (x >= 0 && y <= 7) {
+              //co jak trafilismy na pionek przeciwnika
+              if (board[x][y].toLowerCase() === "b") {
+                //czy pole za nim nie wychodzi z board
+                if (x - 1 <= 7 && y + 1 >= 0) {
+                  //czy to pole jest puste
+                  if (board[x - 1][y + 1] === " ") {
+                    result.push([x - 1, y + 1]);
+                  }
+                }
+                break;
+                //co jak trafimy na swojego
+              } else if (board[x][y].toLowerCase() === "r") {
+                break;
+              } else {
+                result.push([x, y]);
+              }
+
+              x -= 1;
+              y += 1;
+            }
+          }
+        }
+
+        //mozliwosci ruchu gora lewo
+        //czy gora lewo jest na planszy
+        if (rowNumber - 1 >= 0 && columnNumber - 1 >= 0) {
+          //czy lewo gora jest puste
+          if (board[rowNumber - 1][columnNumber - 1].toLowerCase() === " ") {
+            let x = rowNumber - 1;
+            let y = columnNumber - 1;
+
+            while (x >= 0 && y >= 0) {
+              //co jak trafilismy na pionek przeciwnika
+              if (board[x][y].toLowerCase() === "b") {
+                //czy pole za nim nie wychodzi z board i jest puste
+                if (x - 1 >= 0 && y - 1 >= 0) {
+                  if (board[x - 1][y - 1] === " ") {
+                    result.push([x - 1, y - 1]);
+                  }
+                }
+                break;
+                //co jak trafimy na swojego
+              } else if (board[x][y].toLowerCase() === "r") {
+                break;
+              } else {
+                result.push([x, y]);
+              }
+
+              x -= 1;
+              y -= 1;
+            }
+          }
+        }
+      } else {
+        if (rowNumber + 1 <= 7 && columnNumber + 1 <= 7) {
+          //ruch normalnym pionkiem
+          //czy nie wychodzi poza plansze
+          if (
+            board[rowNumber + 1][columnNumber + 1] === "b" &&
+            rowNumber + 2 <= 7 &&
+            columnNumber + 2 <= 7
+          ) {
+            if (board[rowNumber + 2][columnNumber + 2] === " ")
+              result.push([rowNumber + 2, columnNumber + 2]);
+          } else if (board[rowNumber + 1][columnNumber + 1] === " ") {
+            result.push([rowNumber + 1, columnNumber + 1]);
+          }
+        }
+
+        //ruch w lewą strone
+        if (rowNumber + 1 <= 7 && columnNumber - 1 >= 0) {
+          //czy nie wychodzi poza plansze
+          if (
+            board[rowNumber + 1][columnNumber - 1] === "b" &&
+            rowNumber + 2 <= 7 &&
+            columnNumber - 2 >= 0
+          ) {
+            if (board[rowNumber + 2][columnNumber - 2] === " ")
+              result.push([rowNumber + 2, columnNumber - 2]);
+          } else if (board[rowNumber + 1][columnNumber - 1] === " ") {
+            result.push([rowNumber + 1, columnNumber - 1]);
+          }
         }
       }
 
@@ -122,7 +195,23 @@ function Square({
       updatedBoard[clickedSquare[0]][clickedSquare[1]] = " "; //pole z ktorego sie ruszam
 
       //czy pole na ktore sie ruszam jest na granicy bo wtedy powstaje damka pisana capslockiem
-      updatedBoard[rowNumber][columnNumber] = clickedSquare[2]; //pole na ktore sie ruszam
+      if (yourColor === "red") {
+        if (rowNumber + 1 > 7) {
+          //pole na ktore sie ruszam
+          updatedBoard[rowNumber][columnNumber] =
+            clickedSquare[2].toUpperCase();
+        } else {
+          updatedBoard[rowNumber][columnNumber] = clickedSquare[2]; //pole na ktore sie ruszam
+        }
+      } else {
+        if (rowNumber - 1 < 0) {
+          //pole na ktore sie ruszam
+          updatedBoard[rowNumber][columnNumber] =
+            clickedSquare[2].toUpperCase();
+        } else {
+          updatedBoard[rowNumber][columnNumber] = clickedSquare[2]; //pole na ktore sie ruszam
+        }
+      }
 
       //czerwone
       if (yourColor === "red") {
@@ -165,8 +254,8 @@ function Square({
       let newNumberOfRedPieces = 0;
       updatedBoard.forEach((row) => {
         row.forEach((piece) => {
-          if (piece === "b") newNumberOfBlackPieces++;
-          else if (piece === "r") newNumberOfRedPieces++;
+          if (piece.toLowerCase() === "b") newNumberOfBlackPieces++;
+          else if (piece.toLowerCase() === "r") newNumberOfRedPieces++;
         });
       });
 
@@ -187,7 +276,8 @@ function Square({
           //czy pole jest na planszy
         ) {
           if (
-            updatedBoard[rowNumber + 1][columnNumber + 1] === "b" &&
+            updatedBoard[rowNumber + 1][columnNumber + 1].toLowerCase() ===
+              "b" &&
             rowNumber + 2 <= 7 &&
             columnNumber + 2 <= 7
           ) {
@@ -203,7 +293,8 @@ function Square({
           //czy pole jest na planszy
         ) {
           if (
-            updatedBoard[rowNumber + 1][columnNumber - 1] === "b" &&
+            updatedBoard[rowNumber + 1][columnNumber - 1].toLowerCase() ===
+              "b" &&
             rowNumber + 2 <= 7 &&
             columnNumber - 2 >= 0
           ) {
@@ -217,7 +308,8 @@ function Square({
         //prawa strona
         if (rowNumber - 1 >= 0 && columnNumber + 1 <= 7) {
           if (
-            updatedBoard[rowNumber - 1][columnNumber + 1] === "r" &&
+            updatedBoard[rowNumber - 1][columnNumber + 1].toLowerCase() ===
+              "r" &&
             rowNumber - 2 >= 0 &&
             columnNumber + 2 <= 7
           ) {
@@ -230,7 +322,8 @@ function Square({
         //lewa strona
         if (rowNumber - 1 >= 0 && columnNumber - 1 >= 0) {
           if (
-            updatedBoard[rowNumber - 1][columnNumber - 1] === "r" &&
+            updatedBoard[rowNumber - 1][columnNumber - 1].toLowerCase() ===
+              "r" &&
             rowNumber - 2 >= 0 &&
             columnNumber - 2 >= 0
           ) {
@@ -246,7 +339,6 @@ function Square({
         setClickedSquare([]);
 
         socket.emit("piece-move", roomId, updatedBoard);
-        //console.log(whoIsNow);
 
         if (whoIsNow === "black") {
           //setWhoIsNow('red')

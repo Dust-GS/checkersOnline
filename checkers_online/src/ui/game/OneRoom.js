@@ -176,6 +176,9 @@ const OneRoom = ({
           yourNickname={yourData.nickname}
         />
       </div>
+      <div className="what-is-your-color">
+        <p>Your Color is: {yourColor}</p>
+      </div>
     </div>
   );
 };
