@@ -36,6 +36,274 @@ function Square({
     return isOption;
   };
 
+  const queenGetMoveOptions = (result, you, enemy) => {
+    //mozliweosc prawy gorny skos
+    //zaczynamy od bloczka gora prawo od pionka
+    //czy gora prawo nie jest poza planszą
+    if (rowNumber - 1 >= 0 && columnNumber + 1 <= 7) {
+      //czy prawo gora jest puste
+      if (board[rowNumber - 1][columnNumber + 1].toLowerCase() === " ") {
+        let x = rowNumber - 1;
+        let y = columnNumber + 1;
+
+        while (x >= 0 && y <= 7) {
+          //co jak trafilismy na pionek przeciwnika
+          if (board[x][y].toLowerCase() === enemy) {
+            //czy pole za nim nie wychodzi z board
+            if (x - 1 <= 7 && y + 1 >= 0) {
+              //czy to pole jest puste
+              if (board[x - 1][y + 1] === " ") {
+                result.push([x - 1, y + 1]);
+              }
+            }
+            break;
+            //co jak trafimy na swojego
+          } else if (board[x][y].toLowerCase() === you) {
+            break;
+          } else {
+            result.push([x, y]);
+          }
+
+          x -= 1;
+          y += 1;
+        }
+      }
+    }
+
+    //mozliwosci ruchu gora lewo
+    //czy gora lewo jest na planszy
+    if (rowNumber - 1 >= 0 && columnNumber - 1 >= 0) {
+      //czy lewo gora jest puste
+      if (board[rowNumber - 1][columnNumber - 1].toLowerCase() === " ") {
+        let x = rowNumber - 1;
+        let y = columnNumber - 1;
+
+        while (x >= 0 && y >= 0) {
+          //co jak trafilismy na pionek przeciwnika
+          if (board[x][y].toLowerCase() === enemy) {
+            //czy pole za nim nie wychodzi z board i jest puste
+            if (x - 1 >= 0 && y - 1 >= 0) {
+              if (board[x - 1][y - 1] === " ") {
+                result.push([x - 1, y - 1]);
+              }
+            }
+            break;
+            //co jak trafimy na swojego
+          } else if (board[x][y].toLowerCase() === you) {
+            break;
+          } else {
+            result.push([x, y]);
+          }
+
+          x -= 1;
+          y -= 1;
+        }
+      }
+    }
+
+    //dół prawo ruch
+
+    //czy dol prawo jest na planszy
+    if (rowNumber + 1 <= 7 && columnNumber + 1 <= 7) {
+      //czy lewo gora jest puste
+      if (board[rowNumber + 1][columnNumber + 1].toLowerCase() === " ") {
+        let x = rowNumber + 1;
+        let y = columnNumber + 1;
+
+        while (x <= 7 && y <= 7) {
+          //co jak trafilismy na pionek przeciwnika
+          if (board[x][y].toLowerCase() === enemy) {
+            //czy pole za nim nie wychodzi z board i jest puste
+            if (x + 1 <= 7 && y + 1 <= 7) {
+              if (board[x + 1][y + 1] === " ") {
+                result.push([x + 1, y + 1]);
+              }
+            }
+            break;
+            //co jak trafimy na swojego
+          } else if (board[x][y].toLowerCase() === you) {
+            break;
+          } else {
+            result.push([x, y]);
+          }
+
+          x += 1;
+          y += 1;
+        }
+      }
+    }
+
+    //czy dol lewo jest na planszy
+    if (rowNumber + 1 <= 7 && columnNumber - 1 >= 0) {
+      //czy lewo gora jest puste
+      if (board[rowNumber + 1][columnNumber - 1].toLowerCase() === " ") {
+        let x = rowNumber + 1;
+        let y = columnNumber - 1;
+
+        while (x <= 7 && y >= 0) {
+          //co jak trafilismy na pionek przeciwnika
+          if (board[x][y].toLowerCase() === enemy) {
+            //czy pole za nim nie wychodzi z board i jest puste
+            if (x + 1 <= 7 && y - 1 >= 0) {
+              if (board[x + 1][y - 1] === " ") {
+                result.push([x + 1, y - 1]);
+              }
+            }
+            break;
+            //co jak trafimy na swojego
+          } else if (board[x][y].toLowerCase() === you) {
+            break;
+          } else {
+            result.push([x, y]);
+          }
+
+          x += 1;
+          y -= 1;
+        }
+      }
+    }
+  };
+
+  const redPieceGetMoveOptions = (result, isAfterCapture) => {
+    //ruch w prawą strone
+    if (rowNumber + 1 <= 7 && columnNumber + 1 <= 7) {
+      //ruch normalnym pionkiem
+      //czy nie wychodzi poza plansze
+      if (
+        board[rowNumber + 1][columnNumber + 1] === "b" &&
+        rowNumber + 2 <= 7 &&
+        columnNumber + 2 <= 7
+      ) {
+        if (board[rowNumber + 2][columnNumber + 2] === " ")
+          result.push([rowNumber + 2, columnNumber + 2]);
+      } else if (
+        board[rowNumber + 1][columnNumber + 1] === " " &&
+        isAfterCapture === false
+      ) {
+        result.push([rowNumber + 1, columnNumber + 1]);
+      }
+    }
+
+    //ruch w lewą strone
+    if (rowNumber + 1 <= 7 && columnNumber - 1 >= 0) {
+      //czy nie wychodzi poza plansze
+      if (
+        board[rowNumber + 1][columnNumber - 1] === "b" &&
+        rowNumber + 2 <= 7 &&
+        columnNumber - 2 >= 0
+      ) {
+        if (board[rowNumber + 2][columnNumber - 2] === " ")
+          result.push([rowNumber + 2, columnNumber - 2]);
+      } else if (
+        board[rowNumber + 1][columnNumber - 1] === " " &&
+        isAfterCapture === false
+      ) {
+        result.push([rowNumber + 1, columnNumber - 1]);
+      }
+    }
+  };
+
+  const blackPieceGetMoveOptions = (result, isAfterCapture) => {
+    //ruch pionkiem
+    //ruch w prawą strone
+    if (rowNumber - 1 >= 0 && columnNumber + 1 <= 7) {
+      //czy nie wychodzi poza plansze
+      if (
+        board[rowNumber - 1][columnNumber + 1] === "r" &&
+        rowNumber - 2 >= 0 &&
+        columnNumber + 2 <= 7
+      ) {
+        if (board[rowNumber - 2][columnNumber + 2] === " ")
+          result.push([rowNumber - 2, columnNumber + 2]);
+      } else if (
+        board[rowNumber - 1][columnNumber + 1] === " " &&
+        isAfterCapture === false
+      ) {
+        result.push([rowNumber - 1, columnNumber + 1]);
+      }
+    }
+
+    //ruch w lewą strone
+    if (rowNumber - 1 >= 0 && columnNumber - 1 >= 0) {
+      //czy nie wychodzi poza plansze
+      if (
+        board[rowNumber - 1][columnNumber - 1] === "r" &&
+        rowNumber - 2 >= 0 &&
+        columnNumber - 2 >= 0
+      ) {
+        if (board[rowNumber - 2][columnNumber - 2] === " ")
+          result.push([rowNumber - 2, columnNumber - 2]);
+      } else if (
+        board[rowNumber - 1][columnNumber - 1] === " " &&
+        isAfterCapture === false
+      ) {
+        result.push([rowNumber - 1, columnNumber - 1]);
+      }
+    }
+  };
+
+  const moveYourPiece = () => {
+    board[clickedSquare[0]][clickedSquare[1]] = " "; //pole z ktorego sie ruszam
+
+    //czy pole na ktore sie ruszam jest na granicy bo wtedy powstaje damka pisana capslockiem
+    if (yourColor === "red") {
+      if (rowNumber + 1 > 7) {
+        //pole na ktore sie ruszam
+        board[rowNumber][columnNumber] = clickedSquare[2].toUpperCase();
+      } else {
+        board[rowNumber][columnNumber] = clickedSquare[2]; //pole na ktore sie ruszam
+      }
+    } else {
+      if (rowNumber - 1 < 0) {
+        //pole na ktore sie ruszam
+        board[rowNumber][columnNumber] = clickedSquare[2].toUpperCase();
+      } else {
+        board[rowNumber][columnNumber] = clickedSquare[2]; //pole na ktore sie ruszam
+      }
+    }
+  };
+
+  const checkIfPawnWasCaptured = () => {
+    //czerwone
+    if (yourColor === "red") {
+      if (
+        clickedSquare[0] + 2 === rowNumber &&
+        clickedSquare[1] + 2 === columnNumber
+      ) {
+        //czy zbilem na prawo
+        board[clickedSquare[0] + 1][clickedSquare[1] + 1] = " ";
+        return true;
+      } else if (
+        clickedSquare[0] + 2 === rowNumber &&
+        clickedSquare[1] - 2 === columnNumber
+      ) {
+        //czy zbilem na lewo
+        board[clickedSquare[0] + 1][clickedSquare[1] - 1] = " ";
+        return true;
+      }
+    } else {
+      //czarne
+      if (
+        //czy zbilem na prawo
+        clickedSquare[0] - 2 === rowNumber &&
+        clickedSquare[1] + 2 === columnNumber
+      ) {
+        board[clickedSquare[0] - 1][clickedSquare[1] + 1] = " ";
+        return true;
+      } else if (
+        clickedSquare[0] - 2 === rowNumber &&
+        clickedSquare[1] - 2 === columnNumber
+      ) {
+        //czy zbilem na lewo
+        board[clickedSquare[0] - 1][clickedSquare[1] - 1] = " ";
+        return true;
+      }
+    }
+
+    //false gdy nie zbilem
+    return false;
+  };
+
   const handleSquareClick = () => {
     //gdy rusza sie czerwony
     //console.log(`rowNumber: ${rowNumber}, columnNumber: ${columnNumber}`);
@@ -48,104 +316,16 @@ function Square({
       const result = [];
       setClickedSquare([rowNumber, columnNumber, squareData]);
 
-      //ruch w prawą strone
+      //pobierz mozliwe ruchy
       if (squareData === "R") {
         //ruch damką
-        //mozliweosc prawy gorny skos
-        //zaczynamy od bloczka gora prawo od pionka
-        //czy gora prawo nie jest poza planszą
-        if (rowNumber - 1 >= 0 && columnNumber + 1 <= 7) {
-          //czy prawo gora jest puste
-          if (board[rowNumber - 1][columnNumber + 1].toLowerCase() === " ") {
-            let x = rowNumber - 1;
-            let y = columnNumber + 1;
-
-            while (x >= 0 && y <= 7) {
-              //co jak trafilismy na pionek przeciwnika
-              if (board[x][y].toLowerCase() === "b") {
-                //czy pole za nim nie wychodzi z board
-                if (x - 1 <= 7 && y + 1 >= 0) {
-                  //czy to pole jest puste
-                  if (board[x - 1][y + 1] === " ") {
-                    result.push([x - 1, y + 1]);
-                  }
-                }
-                break;
-                //co jak trafimy na swojego
-              } else if (board[x][y].toLowerCase() === "r") {
-                break;
-              } else {
-                result.push([x, y]);
-              }
-
-              x -= 1;
-              y += 1;
-            }
-          }
-        }
-
-        //mozliwosci ruchu gora lewo
-        //czy gora lewo jest na planszy
-        if (rowNumber - 1 >= 0 && columnNumber - 1 >= 0) {
-          //czy lewo gora jest puste
-          if (board[rowNumber - 1][columnNumber - 1].toLowerCase() === " ") {
-            let x = rowNumber - 1;
-            let y = columnNumber - 1;
-
-            while (x >= 0 && y >= 0) {
-              //co jak trafilismy na pionek przeciwnika
-              if (board[x][y].toLowerCase() === "b") {
-                //czy pole za nim nie wychodzi z board i jest puste
-                if (x - 1 >= 0 && y - 1 >= 0) {
-                  if (board[x - 1][y - 1] === " ") {
-                    result.push([x - 1, y - 1]);
-                  }
-                }
-                break;
-                //co jak trafimy na swojego
-              } else if (board[x][y].toLowerCase() === "r") {
-                break;
-              } else {
-                result.push([x, y]);
-              }
-
-              x -= 1;
-              y -= 1;
-            }
-          }
-        }
+        queenGetMoveOptions(result, "r", "b");
       } else {
-        if (rowNumber + 1 <= 7 && columnNumber + 1 <= 7) {
-          //ruch normalnym pionkiem
-          //czy nie wychodzi poza plansze
-          if (
-            board[rowNumber + 1][columnNumber + 1] === "b" &&
-            rowNumber + 2 <= 7 &&
-            columnNumber + 2 <= 7
-          ) {
-            if (board[rowNumber + 2][columnNumber + 2] === " ")
-              result.push([rowNumber + 2, columnNumber + 2]);
-          } else if (board[rowNumber + 1][columnNumber + 1] === " ") {
-            result.push([rowNumber + 1, columnNumber + 1]);
-          }
-        }
-
-        //ruch w lewą strone
-        if (rowNumber + 1 <= 7 && columnNumber - 1 >= 0) {
-          //czy nie wychodzi poza plansze
-          if (
-            board[rowNumber + 1][columnNumber - 1] === "b" &&
-            rowNumber + 2 <= 7 &&
-            columnNumber - 2 >= 0
-          ) {
-            if (board[rowNumber + 2][columnNumber - 2] === " ")
-              result.push([rowNumber + 2, columnNumber - 2]);
-          } else if (board[rowNumber + 1][columnNumber - 1] === " ") {
-            result.push([rowNumber + 1, columnNumber - 1]);
-          }
-        }
+        //pobieramy mozliwosci ruchu pionkiem
+        redPieceGetMoveOptions(result, false);
       }
 
+      //przesylamy te opcje na pole gry
       setMoveOptions(result);
       //gdy rusza sie czarny
     } else if (
@@ -156,103 +336,35 @@ function Square({
       const result = [];
       setClickedSquare([rowNumber, columnNumber, "b"]);
 
-      //ruch w prawą strone
-      if (rowNumber - 1 >= 0 && columnNumber + 1 <= 7) {
-        //czy nie wychodzi poza plansze
-        if (
-          board[rowNumber - 1][columnNumber + 1] === "r" &&
-          rowNumber - 2 >= 0 &&
-          columnNumber + 2 <= 7
-        ) {
-          if (board[rowNumber - 2][columnNumber + 2] === " ")
-            result.push([rowNumber - 2, columnNumber + 2]);
-        } else if (board[rowNumber - 1][columnNumber + 1] === " ") {
-          result.push([rowNumber - 1, columnNumber + 1]);
-        }
+      if (squareData === "B") {
+        //ruch damką
+        queenGetMoveOptions(result, "b", "r");
+      } else {
+        blackPieceGetMoveOptions(result, false);
       }
 
-      //ruch w lewą strone
-      if (rowNumber - 1 >= 0 && columnNumber - 1 >= 0) {
-        //czy nie wychodzi poza plansze
-        if (
-          board[rowNumber - 1][columnNumber - 1] === "r" &&
-          rowNumber - 2 >= 0 &&
-          columnNumber - 2 >= 0
-        ) {
-          if (board[rowNumber - 2][columnNumber - 2] === " ")
-            result.push([rowNumber - 2, columnNumber - 2]);
-        } else if (board[rowNumber - 1][columnNumber - 1] === " ") {
-          result.push([rowNumber - 1, columnNumber - 1]);
-        }
-      }
-
+      //wyslamy opcje ruchu
       setMoveOptions(result);
     } else if (checkIfSquareIsAnOption(rowNumber, columnNumber)) {
+      //co jezelie kliknelismy w pole ktore jest opcją ruchu
       const result = [];
-      let pieceWasCaptured = false;
-      const updatedBoard = board;
 
-      updatedBoard[clickedSquare[0]][clickedSquare[1]] = " "; //pole z ktorego sie ruszam
+      //przesun pionka na miecja w ktore sie ruszasz
+      moveYourPiece();
 
-      //czy pole na ktore sie ruszam jest na granicy bo wtedy powstaje damka pisana capslockiem
-      if (yourColor === "red") {
-        if (rowNumber + 1 > 7) {
-          //pole na ktore sie ruszam
-          updatedBoard[rowNumber][columnNumber] =
-            clickedSquare[2].toUpperCase();
-        } else {
-          updatedBoard[rowNumber][columnNumber] = clickedSquare[2]; //pole na ktore sie ruszam
-        }
-      } else {
-        if (rowNumber - 1 < 0) {
-          //pole na ktore sie ruszam
-          updatedBoard[rowNumber][columnNumber] =
-            clickedSquare[2].toUpperCase();
-        } else {
-          updatedBoard[rowNumber][columnNumber] = clickedSquare[2]; //pole na ktore sie ruszam
-        }
+      //sprawdzamy czy zbielem
+      const pieceWasCaptured = checkIfPawnWasCaptured();
+
+      if (pieceWasCaptured === true){
+        //checkIfCapturedPawnWasTheLastOne()
       }
 
-      //czerwone
-      if (yourColor === "red") {
-        if (
-          clickedSquare[0] + 2 === rowNumber &&
-          clickedSquare[1] + 2 === columnNumber
-        ) {
-          //czy zbilem na prawo
-          updatedBoard[clickedSquare[0] + 1][clickedSquare[1] + 1] = " ";
-          pieceWasCaptured = true;
-        } else if (
-          clickedSquare[0] + 2 === rowNumber &&
-          clickedSquare[1] - 2 === columnNumber
-        ) {
-          //czy zbilem na lewo
-          updatedBoard[clickedSquare[0] + 1][clickedSquare[1] - 1] = " ";
-          pieceWasCaptured = true;
-        }
-      } else {
-        //czarne
-        if (
-          //czy zbilem na prawo
-          clickedSquare[0] - 2 === rowNumber &&
-          clickedSquare[1] + 2 === columnNumber
-        ) {
-          updatedBoard[clickedSquare[0] - 1][clickedSquare[1] + 1] = " ";
-          pieceWasCaptured = true;
-        } else if (
-          clickedSquare[0] - 2 === rowNumber &&
-          clickedSquare[1] - 2 === columnNumber
-        ) {
-          //czy zbilem na lewo
-          updatedBoard[clickedSquare[0] - 1][clickedSquare[1] - 1] = " ";
-          pieceWasCaptured = true;
-        }
-      }
-
+      //sprawdzanie czy ktos wygral
       //zliczanie ilosci pionkow
       let newNumberOfBlackPieces = 0;
       let newNumberOfRedPieces = 0;
-      updatedBoard.forEach((row) => {
+
+      board.forEach((row) => {
         row.forEach((piece) => {
           if (piece.toLowerCase() === "b") newNumberOfBlackPieces++;
           else if (piece.toLowerCase() === "r") newNumberOfRedPieces++;
@@ -260,99 +372,40 @@ function Square({
       });
 
       if (newNumberOfBlackPieces === 0 || newNumberOfRedPieces === 0) {
-        console.log(yourId, roomId);
         socket.emit("new-winner", roomId, yourId);
         someoneWonAction(yourId);
         setMoveOptions([]);
         setClickedSquare([]);
       }
+
       //co jak zbil
       //czerwone
       if (whoIsNow === "red" && pieceWasCaptured === true) {
-        //prawa strona
-        if (
-          rowNumber + 1 <= 7 &&
-          columnNumber + 1 <= 7
-          //czy pole jest na planszy
-        ) {
-          if (
-            updatedBoard[rowNumber + 1][columnNumber + 1].toLowerCase() ===
-              "b" &&
-            rowNumber + 2 <= 7 &&
-            columnNumber + 2 <= 7
-          ) {
-            if (updatedBoard[rowNumber + 2][columnNumber + 2] === " ") {
-              result.push([rowNumber + 2, columnNumber + 2]);
-            }
-          }
-        }
-        //lewa strona
-        if (
-          rowNumber + 1 <= 7 &&
-          columnNumber - 1 >= 0
-          //czy pole jest na planszy
-        ) {
-          if (
-            updatedBoard[rowNumber + 1][columnNumber - 1].toLowerCase() ===
-              "b" &&
-            rowNumber + 2 <= 7 &&
-            columnNumber - 2 >= 0
-          ) {
-            if (updatedBoard[rowNumber + 2][columnNumber - 2] === " ") {
-              result.push([rowNumber + 2, columnNumber - 2]);
-            }
-          }
-        }
+        //czerwone pobieramy opcje ruchu po biciu
+        redPieceGetMoveOptions(result, true)
       } else if (whoIsNow === "black" && pieceWasCaptured === true) {
-        //czarne
-        //prawa strona
-        if (rowNumber - 1 >= 0 && columnNumber + 1 <= 7) {
-          if (
-            updatedBoard[rowNumber - 1][columnNumber + 1].toLowerCase() ===
-              "r" &&
-            rowNumber - 2 >= 0 &&
-            columnNumber + 2 <= 7
-          ) {
-            if (updatedBoard[rowNumber - 2][columnNumber + 2] === " ") {
-              result.push([rowNumber - 2, columnNumber + 2]);
-            }
-          }
-        }
-
-        //lewa strona
-        if (rowNumber - 1 >= 0 && columnNumber - 1 >= 0) {
-          if (
-            updatedBoard[rowNumber - 1][columnNumber - 1].toLowerCase() ===
-              "r" &&
-            rowNumber - 2 >= 0 &&
-            columnNumber - 2 >= 0
-          ) {
-            if (updatedBoard[rowNumber - 2][columnNumber - 2] === " ") {
-              result.push([rowNumber - 2, columnNumber - 2]);
-            }
-          }
-        }
+        //czarne pobieramy opcje ruchu po biciu
+        blackPieceGetMoveOptions(result, true)
       }
 
+      //co jak mamy opcje ruchu
       if (result.length === 0) {
         setMoveOptions([]);
         setClickedSquare([]);
 
-        socket.emit("piece-move", roomId, updatedBoard);
+        socket.emit("piece-move", roomId, board);
 
         if (whoIsNow === "black") {
           //setWhoIsNow('red')
-          enemyMovedAction(updatedBoard, "red");
+          enemyMovedAction(board, "red");
         } else {
-          enemyMovedAction(updatedBoard, "black");
+          enemyMovedAction(board, "black");
         }
+        //co jak nie mamy opcji ruchu
       } else {
+        //jezeli są kolejne opcje ruchu
         setMoveOptions(result);
-        if (yourColor === "red") {
-          setClickedSquare([rowNumber, columnNumber, "r"]);
-        } else {
-          setClickedSquare([rowNumber, columnNumber, "b"]);
-        }
+        setClickedSquare([rowNumber, columnNumber, clickedSquare[2]]);
       }
     }
   };
