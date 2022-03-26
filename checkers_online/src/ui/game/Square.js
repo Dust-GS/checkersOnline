@@ -263,44 +263,111 @@ function Square({
     }
   };
 
-  const checkIfPawnWasCaptured = () => {
-    //czerwone
-    if (yourColor === "red") {
-      if (
-        clickedSquare[0] + 2 === rowNumber &&
-        clickedSquare[1] + 2 === columnNumber
-      ) {
-        //czy zbilem na prawo
-        board[clickedSquare[0] + 1][clickedSquare[1] + 1] = " ";
-        return true;
-      } else if (
-        clickedSquare[0] + 2 === rowNumber &&
-        clickedSquare[1] - 2 === columnNumber
-      ) {
-        //czy zbilem na lewo
-        board[clickedSquare[0] + 1][clickedSquare[1] - 1] = " ";
-        return true;
-      }
-    } else {
-      //czarne
-      if (
-        //czy zbilem na prawo
-        clickedSquare[0] - 2 === rowNumber &&
-        clickedSquare[1] + 2 === columnNumber
-      ) {
-        board[clickedSquare[0] - 1][clickedSquare[1] + 1] = " ";
-        return true;
-      } else if (
-        clickedSquare[0] - 2 === rowNumber &&
-        clickedSquare[1] - 2 === columnNumber
-      ) {
-        //czy zbilem na lewo
-        board[clickedSquare[0] - 1][clickedSquare[1] - 1] = " ";
-        return true;
-      }
+  const checkIfPawnWasCaptured = (pawnValue) => {
+    switch (pawnValue) {
+      case "r":
+        if (
+          clickedSquare[0] + 2 === rowNumber &&
+          clickedSquare[1] + 2 === columnNumber
+        ) {
+          //czy zbilem na prawo
+          board[clickedSquare[0] + 1][clickedSquare[1] + 1] = " ";
+          return true;
+        } else if (
+          clickedSquare[0] + 2 === rowNumber &&
+          clickedSquare[1] - 2 === columnNumber
+        ) {
+          //czy zbilem na lewo
+          board[clickedSquare[0] + 1][clickedSquare[1] - 1] = " ";
+          return true;
+        }
+        break;
+      case "b":
+        //czarne
+        if (
+          //czy zbilem na prawo
+          clickedSquare[0] - 2 === rowNumber &&
+          clickedSquare[1] + 2 === columnNumber
+        ) {
+          board[clickedSquare[0] - 1][clickedSquare[1] + 1] = " ";
+          return true;
+        } else if (
+          clickedSquare[0] - 2 === rowNumber &&
+          clickedSquare[1] - 2 === columnNumber
+        ) {
+          //czy zbilem na lewo
+          board[clickedSquare[0] - 1][clickedSquare[1] - 1] = " ";
+          return true;
+        }
+        break;
+      case "R":
+      case "B":
+        console.log(rowNumber)
+        //czy damka zbila
+        //czy ruszylem sie prawo gora
+        //i czy na polu dol lewo jest pionek
+        if (
+          rowNumber < clickedSquare[0] &&
+          columnNumber > clickedSquare[1] &&
+          board[rowNumber + 1][columnNumber - 1] !== " "
+        ) {
+          board[rowNumber + 1][columnNumber - 1] = " ";
+          return true;
+        } else if (
+          //czy ruszylem sie lewo gora
+          //i czy na polu dol prawo jest pionek
+          rowNumber < clickedSquare[0] &&
+          columnNumber < clickedSquare[1] &&
+          board[rowNumber + 1][columnNumber + 1] !== " "
+        ) {
+          board[rowNumber + 1][columnNumber + 1] = " ";
+          return true;
+        } else if (
+          //czy ruszylem sie praw dol
+          //i czy na polu gora lewo jest pionek
+          rowNumber > clickedSquare[0] &&
+          columnNumber > clickedSquare[1] &&
+          board[rowNumber - 1][columnNumber - 1] !== " "
+        ){
+          board[rowNumber - 1][columnNumber - 1] = " "
+          return true
+        } else if (
+          //czy ruszylem sie lewo dol
+          //i czy na polu gora prawo jest pionek
+          rowNumber > clickedSquare[0] &&
+          columnNumber < clickedSquare[1] &&
+          board[rowNumber + 1][columnNumber - 1] !== " "
+        ){
+          board[rowNumber + 1][columnNumber - 1] = " "
+          return true
+        }
+
+        break;
+      default:
     }
 
     //false gdy nie zbilem
+    return false;
+  };
+
+  const checkIfCapturedPawnWasTheLastOne = () => {
+    //sprawdzanie czy ktos wygral
+    //zliczanie ilosci pionkow
+    let newNumberOfBlackPieces = 0;
+    let newNumberOfRedPieces = 0;
+
+    board.forEach((row) => {
+      row.forEach((piece) => {
+        if (piece.toLowerCase() === "b") newNumberOfBlackPieces++;
+        else if (piece.toLowerCase() === "r") newNumberOfRedPieces++;
+      });
+    });
+
+    //mamy zwycięzce
+    if (newNumberOfBlackPieces === 0 || newNumberOfRedPieces === 0) {
+      return true;
+    }
+
     return false;
   };
 
@@ -352,40 +419,29 @@ function Square({
       //przesun pionka na miecja w ktore sie ruszasz
       moveYourPiece();
 
-      //sprawdzamy czy zbielem
-      const pieceWasCaptured = checkIfPawnWasCaptured();
+      //sprawdzamy czy zbilem
+      const pieceWasCaptured = checkIfPawnWasCaptured(clickedSquare[2]);
 
-      if (pieceWasCaptured === true){
-        //checkIfCapturedPawnWasTheLastOne()
-      }
-
-      //sprawdzanie czy ktos wygral
-      //zliczanie ilosci pionkow
-      let newNumberOfBlackPieces = 0;
-      let newNumberOfRedPieces = 0;
-
-      board.forEach((row) => {
-        row.forEach((piece) => {
-          if (piece.toLowerCase() === "b") newNumberOfBlackPieces++;
-          else if (piece.toLowerCase() === "r") newNumberOfRedPieces++;
-        });
-      });
-
-      if (newNumberOfBlackPieces === 0 || newNumberOfRedPieces === 0) {
-        socket.emit("new-winner", roomId, yourId);
-        someoneWonAction(yourId);
-        setMoveOptions([]);
-        setClickedSquare([]);
-      }
-
-      //co jak zbil
-      //czerwone
-      if (whoIsNow === "red" && pieceWasCaptured === true) {
-        //czerwone pobieramy opcje ruchu po biciu
-        redPieceGetMoveOptions(result, true)
-      } else if (whoIsNow === "black" && pieceWasCaptured === true) {
-        //czarne pobieramy opcje ruchu po biciu
-        blackPieceGetMoveOptions(result, true)
+      if (pieceWasCaptured === true) {
+        if (checkIfCapturedPawnWasTheLastOne()) {
+          //wyslij wiadomosc o zwyciestwie do przeciwnika i bazy danych
+          socket.emit("new-winner", roomId, yourId);
+          //lokalnie zresetuj opcje ruchu i ustaw przeciwnika
+          someoneWonAction(yourId);
+          setMoveOptions([]);
+          setClickedSquare([]);
+        } else {
+          // jak nie ma zwyciezcy to patrzymy co dalej mozna zrobić
+          //co jak zbil
+          //czerwone
+          if (whoIsNow === "red" && pieceWasCaptured === true) {
+            //czerwone pobieramy opcje ruchu po biciu
+            redPieceGetMoveOptions(result, true);
+          } else if (whoIsNow === "black" && pieceWasCaptured === true) {
+            //czarne pobieramy opcje ruchu po biciu
+            blackPieceGetMoveOptions(result, true);
+          }
+        }
       }
 
       //co jak mamy opcje ruchu
@@ -397,13 +453,15 @@ function Square({
 
         if (whoIsNow === "black") {
           //setWhoIsNow('red')
-          enemyMovedAction(board, "red");
+          //change na who is now action
+         // enemyMovedAction("red");
         } else {
-          enemyMovedAction(board, "black");
+        // enemyMovedAction("black");
         }
         //co jak nie mamy opcji ruchu
       } else {
         //jezeli są kolejne opcje ruchu
+        socket.emit("piece-move", roomId, board);
         setMoveOptions(result);
         setClickedSquare([rowNumber, columnNumber, clickedSquare[2]]);
       }
