@@ -10,5 +10,5 @@ Your password is encrypted inside database.
 * Mongoose
 * Socket.IO
 * Axios
-* jsonwebtoken
+* jsonwebtoken  
 and more in package.json
