@@ -6,10 +6,9 @@ Your password is encrypted inside database.
 * React
 * Redux
 * Formik
-* yup
 * Express
-* MongoDB
 * Mongoose
 * Socket.IO
 * Axios
-* SASS
+* jsonwebtoken
+and more in package.json
